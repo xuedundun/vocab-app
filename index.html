@@ -124,8 +124,8 @@ body{font-family:'PingFang SC',-apple-system,sans-serif;background:var(--bg);col
 </nav>
 
 <!-- 外部数据 -->
-<script src="vocab-data.js"></script>
-<script src="invite-codes.js"></script>
+<script src="vocab-data.js" onerror="document.getElementById('loadingScreen').innerHTML='<div class=ld-text><div style=font-size:48px>⚠️</div><h2>词汇数据加载失败</h2><p style=font-size:13px;margin-top:8px>请检查网络后刷新</p><button onclick=location.reload() style=margin-top:16px;padding:10px 24px;border-radius:20px;background:#E8734A;color:#fff;border:none;font-size:14px;cursor:pointer>点击刷新</button></div>'"></script>
+<script src="invite-codes.js" onerror="document.getElementById('loadingScreen').innerHTML='<div class=ld-text><div style=font-size:48px>⚠️</div><h2>邀请码系统加载失败</h2><p style=font-size:13px;margin-top:8px>请检查网络后刷新</p><button onclick=location.reload() style=margin-top:16px;padding:10px 24px;border-radius:20px;background:#E8734A;color:#fff;border:none;font-size:14px;cursor:pointer>点击刷新</button></div>'"></script>
 
 <script>
 // ============================================================
@@ -671,25 +671,51 @@ function render() {
   }
 }
 
+// --- 全局错误捕获 ---
+window.onerror = function(msg, url, line) {
+  var ls = document.getElementById('loadingScreen');
+  if (ls) {
+    ls.innerHTML = '<div class="ld-text"><div style="font-size:48px">⚠️</div><h2>加载出错</h2><p style="font-size:13px;margin-top:8px">' + (msg || '未知错误') + '</p><button onclick="location.reload()" style="margin-top:16px;padding:10px 24px;border-radius:20px;background:#E8734A;color:#fff;border:none;font-size:14px;cursor:pointer">点击刷新</button></div>';
+    ls.style.display = 'flex';
+  }
+  return false;
+};
+
+// --- 超时保护：8秒后强制显示内容 ---
+setTimeout(function() {
+  var ls = document.getElementById('loadingScreen');
+  if (ls && ls.style.display !== 'none') {
+    ls.innerHTML = '<div class="ld-text"><div style="font-size:48px">⏳</div><h2>加载较慢...</h2><p style="font-size:13px;margin-top:8px">网络可能不稳定</p><button onclick="location.reload()" style="margin-top:16px;padding:10px 24px;border-radius:20px;background:#E8734A;color:#fff;border:none;font-size:14px;cursor:pointer">点击刷新</button></div>';
+  }
+}, 8000);
+
 // --- 初始化 ---
 (function init() {
-  // 隐藏加载屏
-  var ls = document.getElementById('loadingScreen');
-  if (ls) ls.style.display = 'none';
+  try {
+    var ls = document.getElementById('loadingScreen');
+    if (ls) ls.style.display = 'none';
+  } catch(e) {}
 
-  var activated = false;
-  try { activated = localStorage.getItem('xuedundun_activated') === 'true'; } catch(e) {}
+  try {
+    var activated = false;
+    try { activated = localStorage.getItem('xuedundun_activated') === 'true'; } catch(e) {}
 
-  if (activated) {
-    document.getElementById('activateOverlay').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-    try { render(); } catch(e) {
-      document.getElementById('app').innerHTML = '<div style="padding:30px;text-align:center"><h3>加载出错</h3><button class="btn btn-primary" onclick="location.reload()" style="margin-top:12px">点击刷新</button></div>';
+    if (activated) {
+      document.getElementById('activateOverlay').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      try { render(); } catch(e) {
+        document.getElementById('app').innerHTML = '<div style="padding:30px;text-align:center"><h3>加载出错: ' + e.message + '</h3><button class="btn btn-primary" onclick="location.reload()" style="margin-top:12px">点击刷新</button></div>';
+      }
+    } else {
+      document.getElementById('app').style.display = 'none';
+      document.getElementById('activateOverlay').style.display = 'flex';
+      setTimeout(function(){ var inp = document.getElementById('inviteInput'); if (inp) inp.focus(); }, 600);
     }
-  } else {
-    document.getElementById('app').style.display = 'none';
-    document.getElementById('activateOverlay').style.display = 'flex';
-    setTimeout(function(){ var inp = document.getElementById('inviteInput'); if (inp) inp.focus(); }, 600);
+  } catch(e) {
+    var ls2 = document.getElementById('loadingScreen');
+    if (ls2) {
+      ls2.innerHTML = '<div class="ld-text"><div style="font-size:48px">⚠️</div><h2>初始化失败</h2><p style="font-size:13px;margin-top:8px">' + (e.message || '') + '</p><button onclick="location.reload()" style="margin-top:16px;padding:10px 24px;border-radius:20px;background:#E8734A;color:#fff;border:none;font-size:14px;cursor:pointer">点击刷新</button></div>';
+    }
   }
 })();
 </script>
