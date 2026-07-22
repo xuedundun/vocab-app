@@ -24,7 +24,7 @@ body{font-family:-apple-system,'PingFang SC','Noto Serif SC',sans-serif;backgrou
 
 /* Bottom Nav */
 .tabs{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--card);display:flex;border-top:1px solid var(--light);z-index:100;padding:6px 0 env(safe-area-inset-bottom,6px)}
-.tab{flex:1;text-align:center;padding:8px 0 6px;font-size:14px;color:var(--sub);cursor:pointer;transition:.2s;font-weight:600;letter-spacing:2px}
+.tab{flex:1;text-align:center;padding:10px 0 8px;font-size:13px;color:var(--sub);cursor:pointer;transition:.2s;font-weight:600;letter-spacing:1px}
 .tab.active{color:var(--red);font-weight:800}
 .tab .t-dot{width:4px;height:4px;border-radius:50%;background:transparent;margin:0 auto 5px;transition:.2s}
 .tab.active .t-dot{background:var(--red);width:6px;height:6px}
@@ -155,11 +155,11 @@ body{font-family:-apple-system,'PingFang SC','Noto Serif SC',sans-serif;backgrou
 </div>
 
 <nav class="tabs" id="tabs" style="display:none">
-  <div class="tab active" data-tab="study"><span class="t-dot"></span>背</div>
-  <div class="tab" data-tab="levels"><span class="t-dot"></span>闯</div>
-  <div class="tab" data-tab="passages"><span class="t-dot"></span>文</div>
-  <div class="tab" data-tab="review"><span class="t-dot"></span>复<span class="badge" id="rvBadge" style="display:none">0</span></div>
-  <div class="tab" data-tab="profile"><span class="t-dot"></span>我</div>
+  <div class="tab active" data-tab="study"><span class="t-dot"></span>背诵</div>
+  <div class="tab" data-tab="levels"><span class="t-dot"></span>闯关</div>
+  <div class="tab" data-tab="passages"><span class="t-dot"></span>短文</div>
+  <div class="tab" data-tab="review"><span class="t-dot"></span>复习<span class="badge" id="rvBadge" style="display:none">0</span></div>
+  <div class="tab" data-tab="profile"><span class="t-dot"></span>我的</div>
 </nav>
 
 <canvas id="shareCanvas" width="750" height="1100"></canvas>
@@ -501,6 +501,9 @@ var PASSAGES=[
   {t:"The Winning Mindset",tag:"健康运动",
    en:"Every athlete knows that physical strength alone cannot achieve greatness. The true secret lies in the mind. Mental toughness, discipline, and the ability to overcome obstacles — these separate champions from the rest. Tom was never the most talented player on his team. He was often regarded as too short and too slow. But what he lacked in natural talent, he made up for with determination. Every morning he would practice for two hours. Every evening he would review game videos and analyze his performance. His coach observed his progress with admiration. 'Tom understands that success is not about being the best on day one. It is about being better than yesterday.' During the crucial championship game, his team was behind by ten points. The atmosphere was tense. But Tom stood up and delivered a speech that changed everything. In the second half, they played with remarkable energy and focus. They made an incredible comeback and won. True victory is the courage to continue when everything seems hopeless.",
    cn:"每个运动员都知道，仅有身体力量不足以成就伟大。真正的秘诀在于心智。心理韧性、自律和克服障碍的能力——这些区分了冠军和常人。汤姆从来不是队里最有天赋的球员，常被认为太矮太慢。但他用决心弥补了天赋的不足。每天早上练习两小时，每晚回顾比赛视频分析表现。教练欣慰地观察着他的进步。'汤姆明白成功不是第一天就成为最好的，而是比昨天更好。'在关键冠军赛中，球队落后十分，气氛紧张。但汤姆站起来发表了一段改变一切的演讲。下半场他们以非凡的能量和专注投入比赛，实现了不可思议的逆转并获胜。真正的胜利是在一切似乎无望时继续前行的勇气。"},
+  {t:"Roots and Wings",tag:"家庭成长",
+   en:"Family is where we receive our first lessons about life, love, and responsibility. It shapes our character, influences our values, and provides the foundation upon which we build our future. During adolescence, conflicts seem almost inevitable. Teenagers desire independence while parents want to protect them from potential harm. Arguments arise over seemingly minor issues — curfews, phone usage, academic expectations. But beneath these surface disagreements often lie deeper concerns about trust and communication. What many young people fail to recognize is that their parents are also learning. No one is born knowing how to be a perfect parent. They make mistakes, they struggle, and they sometimes say the wrong things. But their intentions are almost always rooted in love. My grandmother once shared a valuable piece of advice: give your children two things — roots to know where they come from, and wings to fly wherever they choose.",
+   cn:"家庭是我们接受关于生活、爱和责任的第一次教育的地方。它塑造我们的品格，影响我们的价值观，并为我们建设未来提供基础。在青春期，冲突似乎不可避免。青少年渴望独立，而父母想保护他们免受潜在伤害。争论因看似微小的事情而产生。但在这些表面分歧之下，往往隐藏着关于信任和沟通的更深层关切。许多年轻人没有意识到的是，他们的父母也在学习。没有人天生知道如何做完美的父母。他们会犯错，会挣扎，有时会说错话。但他们的意图几乎总是植根于爱。我的祖母曾分享过一条宝贵的建议：给你的孩子两样东西——根，让他们知道自己来自哪里；翅膀，让他们飞往任何想去的地方。"},
   {t:"Bridging Cultures",tag:"文化交流",
    en:"Last summer, Lisa had an extraordinary opportunity to participate in an international exchange program in London. As someone who had never traveled abroad, she felt both excited and anxious. The first few days were overwhelming. Everything seemed different — the food, the weather, the way people communicated. Lisa struggled to understand the local accent and often felt awkward in social situations. But gradually, things began to change. She made friends with students from various countries — Japan, Brazil, Germany, and Kenya. Each conversation was a window into a different culture. She discovered that despite obvious differences, young people everywhere share similar dreams, fears, and hopes. One evening, the program organized a cultural night where everyone presented something from their home country. Lisa performed a traditional Chinese dance and explained the meaning behind the movements. The audience was fascinated. This experience transformed Lisa's perspective. Cultural differences are not barriers but bridges.",
    cn:"去年夏天，丽莎获得了参加伦敦国际交流项目的非凡机会。从未出过国的她既兴奋又焦虑。最初几天让人不知所措，一切似乎都不同——食物、天气、人们交流的方式。丽莎努力理解当地口音，在社交场合常感尴尬。但渐渐地，情况改变了。她与来自日本、巴西、德国和肯尼亚的学生交了朋友。每次对话都是通向不同文化的窗口。她发现尽管存在明显差异，世界各地的年轻人分享着相似的梦想和希望。一晚，项目组织了文化之夜，每人展示来自自己国家的东西。丽莎表演了中国传统舞蹈并解释动作含义，观众深深着迷。这次经历转变了丽莎的视角：文化差异不是障碍，而是桥梁。"},
@@ -602,7 +605,7 @@ function renderProfile(c,p){
     '<div style="padding:24px 16px 0"><div style="font-size:22px;font-weight:800;margin-bottom:2px">我的进度</div><div style="font-size:13px;color:var(--sub)">'+(phase==='high'?'高频速通':'正式背诵')+' · DAY '+pd+'</div></div>'+
     '<div class="stat-row" style="margin-top:16px"><div class="stat-box"><div class="num">'+(p.days||0)+'</div><div class="lbl">学习天数</div></div><div class="stat-box"><div class="num">'+seen+'</div><div class="lbl">已学词汇</div></div><div class="stat-box"><div class="num">'+mastered+'</div><div class="lbl">已掌握</div></div></div>'+
     '<div class="stat-row"><div class="stat-box"><div class="num">'+acc+'%</div><div class="lbl">正确率</div></div><div class="stat-box"><div class="num">'+done+'/30</div><div class="lbl">通关关卡</div></div><div class="stat-box"><div class="num">'+(TOTAL-seen)+'</div><div class="lbl">剩余词汇</div></div></div>'+
-    '<button class="btn btn-r btn-blk" style="margin:0 16px 8px" onclick="generateProfileCard()">生成学习报告 · 打卡图</button>'+
+    '<div style="padding:0 40px"><button class="btn btn-r btn-blk" onclick="generateProfileCard()">生成学习报告 · 发送给教务老师</button></div>'+
     '<button class="btn btn-w btn-blk" style="margin:0 16px" onclick="if(confirm(\'确定重置？\')){localStorage.removeItem(\'xd_v\');location.reload();}">重置进度</button>';
 }
 
