@@ -24,8 +24,8 @@ body{font-family:-apple-system,'PingFang SC','Noto Serif SC',sans-serif;backgrou
 
 /* Bottom Nav */
 .tabs{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--card);display:flex;border-top:1px solid var(--light);z-index:100;padding:6px 0 env(safe-area-inset-bottom,6px)}
-.tab{flex:1;text-align:center;padding:8px 0 6px;font-size:12px;color:var(--sub);cursor:pointer;transition:.2s;font-weight:600;letter-spacing:1px}
-.tab.active{color:var(--red);font-weight:700}
+.tab{flex:1;text-align:center;padding:8px 0 6px;font-size:14px;color:var(--sub);cursor:pointer;transition:.2s;font-weight:600;letter-spacing:2px}
+.tab.active{color:var(--red);font-weight:800}
 .tab .t-dot{width:4px;height:4px;border-radius:50%;background:transparent;margin:0 auto 5px;transition:.2s}
 .tab.active .t-dot{background:var(--red);width:6px;height:6px}
 .tab .badge{background:var(--red);color:#fff;font-size:9px;padding:1px 5px;border-radius:7px;position:absolute;margin-left:8px;margin-top:-20px;min-width:14px;text-align:center}
@@ -88,7 +88,7 @@ body{font-family:-apple-system,'PingFang SC','Noto Serif SC',sans-serif;backgrou
 .quiz-opt.wrong{border-color:#B0B0B0;background:#F5F5F5;opacity:.6}
 
 /* Stats */
-.stat-row{display:flex;gap:10px;margin:0 16px 14px}
+.stat-row{display:flex;gap:10px;padding:0 16px;margin-bottom:14px;width:100%;max-width:100%;box-sizing:border-box}
 .stat-box{flex:1;background:var(--card);border-radius:var(--radius);padding:18px 12px;text-align:center;box-shadow:var(--shadow);border:1px solid var(--light)}
 .stat-box .num{font-size:30px;font-weight:800;color:var(--red)}
 .stat-box .lbl{font-size:11px;color:var(--sub);margin-top:5px}
@@ -155,11 +155,11 @@ body{font-family:-apple-system,'PingFang SC','Noto Serif SC',sans-serif;backgrou
 </div>
 
 <nav class="tabs" id="tabs" style="display:none">
-  <div class="tab active" data-tab="study"><span class="t-dot"></span>背诵</div>
-  <div class="tab" data-tab="levels"><span class="t-dot"></span>闯关</div>
-  <div class="tab" data-tab="passages"><span class="t-dot"></span>短文</div>
-  <div class="tab" data-tab="review"><span class="t-dot"></span>复习<span class="badge" id="rvBadge" style="display:none">0</span></div>
-  <div class="tab" data-tab="profile"><span class="t-dot"></span>我的</div>
+  <div class="tab active" data-tab="study"><span class="t-dot"></span>背</div>
+  <div class="tab" data-tab="levels"><span class="t-dot"></span>闯</div>
+  <div class="tab" data-tab="passages"><span class="t-dot"></span>文</div>
+  <div class="tab" data-tab="review"><span class="t-dot"></span>复<span class="badge" id="rvBadge" style="display:none">0</span></div>
+  <div class="tab" data-tab="profile"><span class="t-dot"></span>我</div>
 </nav>
 
 <canvas id="shareCanvas" width="750" height="1100"></canvas>
@@ -257,7 +257,17 @@ function renderStudy(c,p){
     c.innerHTML='<div class="empty"><div class="e-icon">✓</div><h3>今日任务完成</h3><p>已学 '+sp+'/'+tp+' 词 · 第'+(p.days||0)+'天</p><button class="btn btn-r btn-blk" style="max-width:200px;margin:16px auto" onclick="switchTab(\'levels\')">去闯关测试</button></div>';
     return;
   }
-  fcWords=words;fcIdx=0;flipped=false;
+  fcWords=words;flipped=false;
+  // 断点续接：如果今天背过一部分，从上次断开处继续
+  var savedIdx=parseInt(localStorage.getItem('xd_study_idx')||'0');
+  var savedDate=localStorage.getItem('xd_study_date')||'';
+  if(savedDate===today() && savedIdx>0 && savedIdx<fcWords.length){
+    fcIdx=savedIdx;
+  }else{
+    fcIdx=0;
+    localStorage.setItem('xd_study_idx','0');
+    localStorage.setItem('xd_study_date',today());
+  }
   var hc=words.filter(function(w){return w.isH;}).length;
   var pn=phase==='high'?'高频速通':'正式背诵',pd=getPhaseDay(p);
 
@@ -275,6 +285,7 @@ function startStudy(){ if(fcWords.length===0){toast('今天没有要背的词了
 function showFC(){
   if(fcIdx>=fcWords.length){
     var p=load();if(p.ld!==today()){p.days=(p.days||0)+1;p.ld=today();save(p);}
+    localStorage.removeItem('xd_study_idx');localStorage.removeItem('xd_study_date');
     document.getElementById('mainContent').innerHTML='<div class="empty"><div class="e-icon">✓</div><h3>本轮完成</h3><p>今日 '+fcWords.length+' 词 · 连续第'+(p.days||0)+'天</p><button class="btn btn-r btn-blk" style="max-width:200px;margin:12px auto" onclick="switchTab(\'levels\')">去闯关</button><button class="btn btn-w btn-blk" style="max-width:200px;margin:8px auto" onclick="switchTab(\'study\')">回主页</button></div>';
     return;
   }
@@ -300,7 +311,11 @@ function mark(ok){
   if(ok){ws.c++;p.tc=(p.tc||0)+1;ws.rnd=Math.min(ws.rnd+1,EBB.length);
     if(ws.rnd<EBB.length){var d=new Date();d.setDate(d.getDate()+EBB[ws.rnd]);ws.nr=d.toISOString().slice(0,10);}else ws.nr='2099-01-01';
   }else{ws.w++;p.tw=(p.tw||0)+1;ws.rnd=0;var d=new Date();d.setDate(d.getDate()+1);ws.nr=d.toISOString().slice(0,10);}
-  p[k]=ws;save(p);fcIdx++;showFC();
+  p[k]=ws;save(p);fcIdx++;
+  // 保存背诵进度，断点续接
+  localStorage.setItem('xd_study_idx',fcIdx);
+  localStorage.setItem('xd_study_date',today());
+  showFC();
 }
 
 // ====== TAB2: 闯关 ======
@@ -534,7 +549,7 @@ var PASSAGES=[
 ];
 
 function renderPassages(c,p){
-  var h='<div style="padding:20px 16px 0"><div style="font-size:22px;font-weight:800;margin-bottom:2px">语境短文</div><div style="font-size:13px;color:var(--sub);margin-bottom:12px">在阅读中巩固词汇 · 共10篇 · 含中文翻译</div></div>';
+  var h='<div style="padding:20px 16px 0"><div style="font-size:22px;font-weight:800;margin-bottom:2px">语境短文</div><div style="font-size:13px;color:var(--sub);margin-bottom:12px">在阅读中巩固词汇 · 共20篇 · 含中文翻译</div></div>';
   for(var i=0;i<PASSAGES.length;i++){
     var ps=PASSAGES[i];
     h+='<div class="passage-card" onclick="openPassage('+i+')"><div class="ps-num">0'+(i+1)+'</div><div class="ps-title">'+ps.t+'</div><div class="ps-tag">'+ps.tag+'</div></div>';
