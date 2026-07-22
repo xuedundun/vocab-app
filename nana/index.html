@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#C83C3C">
+<meta property="og:title" content="NANA学姐 · 高考词汇速通关">
+<meta property="og:description" content="高中英语3500词 · 30关闯关 · 艾宾浩斯记忆法">
+<meta property="og:url" content="https://xuedundun.github.io/vocab-app/">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
+<title>NANA学姐 · 高考词汇速通关</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,'PingFang SC',sans-serif;background:#F8F6F4;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+.box{text-align:center;max-width:320px;width:100%}
+.logo{width:56px;height:56px;background:#C83C3C;border-radius:16px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:26px;font-weight:800;margin:0 auto 16px}
+h2{font-size:22px;font-weight:800;color:#2C2C2C;margin-bottom:4px}
+.sub{font-size:13px;color:#8E8B86;margin-bottom:28px}
+input{width:100%;padding:15px;border-radius:14px;border:1.5px solid #EBE8E4;font-size:17px;text-align:center;letter-spacing:2px;font-family:monospace;background:#fff;outline:none}
+input:focus{border-color:#C83C3C}
+button{width:100%;padding:15px;border-radius:24px;background:#C83C3C;color:#fff;border:none;font-size:16px;font-weight:600;margin-top:14px;cursor:pointer}
+button:active{background:#A62B2B;transform:scale(.97)}
+button:disabled{opacity:.5}
+.err{color:#C83C3C;font-size:13px;margin-top:10px;min-height:20px}
+.hint{font-size:11px;color:#C0BDB8;margin-top:24px}
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="logo">囤</div>
+  <h2>NANA学姐 · 高考词汇速通关</h2>
+  <p class="sub">NANA学姐 · 内部学员专属</p>
+  <input id="code" type="text" placeholder="输入邀请码" autocomplete="off" autocapitalize="characters" maxlength="14">
+  <div class="err" id="err"></div>
+  <button id="btn" onclick="activate()">激活并开始使用</button>
+  <p class="hint">邀请码由教务老师发放</p>
+</div>
+<script>
+function sha256(m){function r(x,n){return(x>>>n)|(x<<(32-n))}function c(x,y,z){return(x&y)^(~x&z)}function M(x,y,z){return(x&y)^(x&z)^(y&z)}function S0(x){return r(x,2)^r(x,13)^r(x,22)}function S1(x){return r(x,6)^r(x,11)^r(x,25)}function s0(x){return r(x,7)^r(x,18)^(x>>>3)}function s1(x){return r(x,17)^r(x,19)^(x>>>10)}var K=[0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];var B=[];for(var i=0;i<m.length;i++){var ch=m.charCodeAt(i);if(ch<0x80)B.push(ch);else if(ch<0x800){B.push(0xc0|(ch>>>6));B.push(0x80|(ch&0x3f))}else if(ch<0x10000){B.push(0xe0|(ch>>>12));B.push(0x80|((ch>>>6)&0x3f));B.push(0x80|(ch&0x3f))}else{B.push(0xf0|(ch>>>18));B.push(0x80|((ch>>>12)&0x3f));B.push(0x80|((ch>>>6)&0x3f));B.push(0x80|(ch&0x3f))}}var bl=B.length*8;B.push(0x80);while((B.length%64)!==56)B.push(0);var hi=Math.floor(bl/0x100000000),lo=bl>>>0;B.push((hi>>>24)&0xff,(hi>>>16)&0xff,(hi>>>8)&0xff,hi&0xff);B.push((lo>>>24)&0xff,(lo>>>16)&0xff,(lo>>>8)&0xff,lo&0xff);var H=[0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];var W=new Array(64);for(var b=0;b<B.length;b+=64){for(var t=0;t<16;t++)W[t]=(B[b+t*4]<<24)|(B[b+t*4+1]<<16)|(B[b+t*4+2]<<8)|B[b+t*4+3];for(t=16;t<64;t++)W[t]=(s1(W[t-2])+W[t-7]+s0(W[t-15])+W[t-16])>>>0;var a=H[0],bb=H[1],cc=H[2],d=H[3],e=H[4],f=H[5],g=H[6],h=H[7];for(t=0;t<64;t++){var T1=(h+S1(e)+c(e,f,g)+K[t]+W[t])>>>0;var T2=(S0(a)+M(a,bb,cc))>>>0;h=g;g=f;f=e;e=(d+T1)>>>0;d=cc;cc=bb;bb=a;a=(T1+T2)>>>0}H[0]=(H[0]+a)>>>0;H[1]=(H[1]+bb)>>>0;H[2]=(H[2]+cc)>>>0;H[3]=(H[3]+d)>>>0;H[4]=(H[4]+e)>>>0;H[5]=(H[5]+f)>>>0;H[6]=(H[6]+g)>>>0;H[7]=(H[7]+h)>>>0}return H.map(function(x){return x.toString(16).padStart(8,'0')}).join('')}
+var HASHES=["1be39228d58ef982", "cc6f8385d8ff0ff3", "17a1cb51dc8f3e8b", "1c74fe2323a7e809", "6bafecf65765be92", "a63459c4afe2e411", "59738474c85e57ac", "278a041433a38403", "5fab6b7c1d8e3fb2", "9cf43b626958de4d", "735145956de9fff8", "e30f0ae41c0216a2", "7af74248dfc01e19", "17e1fabe6e67f5f8", "e7aa0612637024c2", "20d21dfb85b6dc93", "227014ee9ed8b77d", "6cf67fc2c10bddd5", "104beb1a6df71a28", "2a4e024e63e126d4", "a4d4ea7eec6dcc26", "1c8e036d56cb81a6", "2658f86ada634762", "86087c291b655945", "464dcde7c6c3034c", "ebb6f113010b7e5d", "2c28c1649833b904", "d2e35c846da06424", "ff95ea7d96c75523", "fa19e475291b0651", "8465f0bf18e4a680", "bd2f746c15964ee4", "da8a23ff6cbba80e", "c7626591f238d906", "8a200c2da08f05fc", "22d1b8875c37013a", "effc268a99e9ef5d", "096361257304b413", "3ae256aaedd24d5b", "4aafae83b77959b2", "f133d21bbe2fb677", "32eb1201689c41d0", "a0fe065b18de8a73", "3b40d40b0658868b", "597a820885792c1a", "300cf7f080a8382d", "4a9d0d11e63f2cd8", "d872b4a9473aa1a9", "f0373e5cb154cda8", "a532300f79cb39b0", "43e2d4452208efa1", "313b2556ffa59814", "d0961d9a132b5d2b", "bd8735e31ccc124a", "f532cb1336206cad", "8c01b68c1c06ddfb", "eea1b428fa5221cb", "9062f48cd7fac96f", "c29c2982b7f91ccb", "a81e72590c93b3bb", "da49e2cb14d0dbc7", "4bbc70a613cc7ee1", "6dacb8025009b0e2", "d3ada71e89b9a01b", "ad347c57ac148482", "02e5778d64423ef4", "293c58a4cff0af46", "14d5f35bf03236ea", "a7241154644f4c89", "b69bb7694ba37dc2", "47f3341e26574b28", "295e118dd2d2907b", "409d3350c7481551", "c52b2eb47ccf6d1b", "cb006659ba2dd587", "b42a0d4935b95825", "ef2aa5ee6508e6aa", "0b2d89aa0b3a18a2", "a31b1cdcf822a012", "58744e7b15c9ebc1", "ccb9bc412c79d195", "baff1c1770dda0c1", "cfb8f3f6b833716e", "4d677ce7263c2858", "23c0c516bfe5455b", "ee6062949c4c5c18", "2c6d78ec2fd53349", "fc8660428138c0cb", "59de2baf3ca3690a", "037af4fc148b8a02", "c5edcf23e0271220", "f064cd125858af79", "18396aa0f564e4f3", "f33b4141dc915580", "4abbcc0cd7bc8579", "c7c216fbbcc70cab", "6a76659a2534f3ec", "0c0368a45b135537", "77feb3a294b3ec0a", "1d104f4c7ecc5f5f", "c8735b02789b29df", "0b4bd8b3e543dcb0", "7f08058c669e5be9", "c9e83c176b0825c7", "f2305f0a4b2d0cbb", "9bd8acedabca9a78", "215941fc64c520f2", "83e9b319e629ad71", "b7587fd06ef15f59", "06de6ba7ec59254c", "af27b3d3a527c525", "4b515c20e72092da", "657e7c6fc3abcc4c", "6296dc76e33bfc23", "fa15d64cb1d450a8", "683603db1e5ef856", "6ce71f89264e9840", "304d7b6d15467cf7", "9b011fa485136cc7", "8461afec34b0bf00", "be650e625c16951d", "355d45c993426cb5", "5297009c768e8011", "81490ca3e315671a", "711e12b9c2209c7b", "d292b036a3079e95", "6f1f6298db25f5b7", "af80b6942865bf6c", "5ec6285984df3168", "b98b71a88d75e4a9", "0fc6273df3f7fe62", "7d237e89ffc17a70", "5536b6918ea0203a", "1129f8ed472d854b", "e3bd3156c33494ff", "15509bbb6b838e77", "6ac17ff6c1568b6a", "adef2501970d1e85", "de0db1a276bbccc2", "bf53fd03d445fee2", "a65ded16200cd1e4", "2f2affc0559e1bbb", "46932a4091ab1c86", "2d6947c6ca8f7357", "5f3a53baac5cfe56", "078011aad6bdcfab", "ca7a83e7253342c0", "7702641c63070190", "4002ed282982f31f", "bedc0e99b134caf3", "d39deb2f41facbf6", "f87965c917a77a56", "a33be94b249a5279", "52437adec96ee8ff", "afe3bbb9e08100f0", "ab8ee267879b6156", "5afbd18b5caf54ef", "75e146e17c9ff4f4", "a2a112c26973fe00", "5806bf5e24330212", "719fe7b86c32e8af", "230522e5b516b059", "7787b11726b3eed9", "4f2f9b1117dc1843", "e7d87de078caca4f", "25150b46b3e1cf10", "7bdeb0a87fc5a29b", "126b6d49135b21d5", "bd9d5c78930ae6ff", "8558551af404f6e2", "5ae0ac34617511b4", "6ce77c2187981ac4", "43614ec43f40ff84", "637c3ba97d3a92f3", "de8dc942e6fcff96", "9b4c61e077256fab", "827bd798292b3b16", "d92dfc06215d1f83", "3b1f5decca005696", "48afe32796e96d94", "7f7d027584239f94", "e808d6b44dfe5cdd", "63ec6657c7274266", "324599847c8d76ed", "3ecffa63c1e73639", "067d3838ee0a6f9c", "e653fe0f413bb37b", "0bf5c528e296709a", "c508ba20daf45821", "fee62c80ad04aa9c", "1838030218a9c068", "e3083e0e0e73eb58", "2933f976b95acf90", "63b5fa216ee60eec", "e442c0e7d96743f5", "92f5ff18d3274246", "d9506435785cff76", "f711c8232762cad9", "8ad8877064c3cdf9", "69c66438ecceb43b"];var SALT="xuedundun_salt_";
+function activate(){var btn=document.getElementById("btn"),err=document.getElementById("err"),code=document.getElementById("code").value.trim().toUpperCase();if(!code||code.length<10){err.textContent="请输入有效邀请码";return;}btn.textContent="验证中...";btn.disabled=true;err.textContent="";setTimeout(function(){try{var h=sha256(SALT+code).slice(0,16);if(HASHES.indexOf(h)>=0){localStorage.setItem("nana_act","1");window.location.href="app.html"}else{err.textContent="邀请码无效";btn.textContent="激活并开始使用";btn.disabled=false}}catch(e){err.textContent="验证失败，请刷新";btn.textContent="激活并开始使用";btn.disabled=false}},50)}
+document.getElementById("code").addEventListener("input",function(){var v=this.value.replace(/[^A-Za-z0-9]/g,"").toUpperCase();if(v.length>8)v=v.slice(0,3)+"-"+v.slice(3,7)+"-"+v.slice(7,11);else if(v.length>4)v=v.slice(0,3)+"-"+v.slice(4,8);this.value=v.slice(0,14)})
+document.getElementById("code").addEventListener("keydown",function(e){if(e.key==="Enter")activate()})
+if(localStorage.getItem("nana_act")==="1")window.location.href="app.html"
+</script>
+</body>
+</html>
