@@ -4,72 +4,155 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#2C3E6B">
+<meta name="theme-color" content="#58CC02">
 <meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
-<title>学囤囤 · 高考词汇闯关</title>
+<title>学囤囤 · 词汇闯关</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'PingFang SC',-apple-system,sans-serif;background:#F5F7FA;color:#333;max-width:480px;margin:0 auto;min-height:100vh;-webkit-tap-highlight-color:transparent;user-select:none}
-.app{padding-bottom:80px}
-.header{background:#2C3E6B;color:#fff;padding:16px 20px;text-align:center;position:sticky;top:0;z-index:100}
-.header h1{font-size:18px;font-weight:600}
-.tabs{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;display:flex;border-top:1px solid #E8ECF1;z-index:100;padding-bottom:env(safe-area-inset-bottom,0)}
-.tab{flex:1;text-align:center;padding:8px 0;font-size:11px;color:#999;cursor:pointer}
-.tab.active{color:#2C3E6B;font-weight:600}
-.tab .ic{font-size:20px;display:block;margin-bottom:2px}
-.tab .badge{background:#E74C3C;color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;position:relative;top:-8px}
-.card{background:#fff;border-radius:14px;padding:20px;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,0,0,.08)}
-.card-title{font-size:16px;font-weight:600;margin-bottom:8px;color:#2C3E6B}
-.btn{display:inline-block;padding:12px 28px;border-radius:25px;font-size:15px;font-weight:600;border:none;cursor:pointer;text-align:center}
-.btn-p{background:#2C3E6B;color:#fff}
-.btn-o{background:#E8734A;color:#fff}
-.btn-b{display:block;width:100%}
-.btn:active{opacity:.8;transform:scale(.97)}
-.flashcard{background:#fff;border-radius:14px;padding:30px 20px;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,0,0,.08);cursor:pointer;position:relative}
-.flashcard .w{font-size:32px;font-weight:700;color:#2C3E6B}
-.flashcard .m{font-size:20px;color:#333;margin-top:12px;text-align:center}
-.flashcard .hint{font-size:12px;color:#999;margin-top:8px}
-.flashcard .tag{position:absolute;top:12px;right:12px;background:#E8ECF1;font-size:11px;padding:3px 8px;border-radius:8px}
-.level-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.level-item{background:#fff;border-radius:14px;padding:14px 8px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.08);cursor:pointer;position:relative}
-.level-item.locked{opacity:.4;pointer-events:none}
-.level-item .lv-num{font-size:22px;font-weight:700;color:#2C3E6B}
-.level-item .lv-name{font-size:10px;color:#999;margin-top:4px}
-.stat-row{display:flex;gap:12px;margin-bottom:12px}
-.stat-box{flex:1;background:#fff;border-radius:14px;padding:14px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.08)}
-.stat-box .num{font-size:26px;font-weight:700;color:#2C3E6B}
-.stat-box .lbl{font-size:11px;color:#999;margin-top:4px}
-.progress-bar{height:8px;background:#E8ECF1;border-radius:4px;overflow:hidden;margin:8px 0}
-.progress-fill{height:100%;background:#E8734A;border-radius:4px;transition:width .3s}
-.quiz-word{font-size:28px;font-weight:700;color:#2C3E6B;text-align:center;padding:20px}
-.quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.quiz-opt{padding:16px;background:#fff;border:2px solid #E8ECF1;border-radius:14px;font-size:14px;text-align:center;cursor:pointer}
-.quiz-opt.correct{border-color:#27AE60;background:#E8F8F0}
-.quiz-opt.wrong{border-color:#E74C3C;background:#FDE8E8}
-.toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.8);color:#fff;padding:12px 24px;border-radius:25px;font-size:14px;z-index:999;animation:ti .3s}
+:root{--green:#58CC02;--green2:#46A302;--blue:#1CB0F6;--orange:#FF9600;--red:#FF4B4B;--bg:#F7F7F7;--card:#fff;--text:#333;--gray:#999;--light:#E5E5E5;--radius:20px;--shadow:0 2px 16px rgba(0,0,0,.06)}
+body{font-family:'PingFang SC',-apple-system,'SF Pro Display',sans-serif;background:var(--bg);color:var(--text);max-width:480px;margin:0 auto;min-height:100vh;overflow-x:hidden;-webkit-tap-highlight-color:transparent;user-select:none}
+.app{padding-bottom:90px}
+
+/* Header */
+.header{background:var(--green);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.header .logo{color:#fff;font-size:18px;font-weight:700;display:flex;align-items:center;gap:8px}
+.header .logo .owl{font-size:28px}
+.header .streak{background:rgba(255,255,255,.2);color:#fff;padding:4px 12px;border-radius:20px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:4px}
+
+/* Bottom Nav - Duolingo pill style */
+.tabs{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:448px;background:#fff;display:flex;border-radius:18px;z-index:100;box-shadow:0 2px 24px rgba(0,0,0,.12);padding:6px}
+.tab{flex:1;text-align:center;padding:8px 0 6px;font-size:10px;color:var(--gray);cursor:pointer;transition:.2s;border-radius:14px;font-weight:500}
+.tab.active{color:var(--green);font-weight:700;background:#F0FCE8}
+.tab .ic{font-size:22px;display:block;margin-bottom:1px}
+.tab .badge{background:var(--red);color:#fff;font-size:9px;padding:1px 5px;border-radius:8px;position:absolute;margin-left:10px;margin-top:-28px;min-width:16px;text-align:center}
+
+/* Card */
+.card{background:var(--card);border-radius:var(--radius);padding:20px;margin:12px 16px;box-shadow:var(--shadow)}
+.card-title{font-size:17px;font-weight:700;margin-bottom:6px}
+
+/* Buttons - Duolingo 3D style */
+.btn{display:inline-block;padding:14px 28px;border-radius:16px;font-size:16px;font-weight:700;border:none;cursor:pointer;text-align:center;transition:.15s;border-bottom:4px solid transparent}
+.btn:active{transform:translateY(2px);border-bottom-width:2px}
+.btn-g{background:var(--green);color:#fff;border-bottom-color:var(--green2)}
+.btn-b{background:var(--blue);color:#fff;border-bottom-color:#1493D3}
+.btn-o{background:var(--orange);color:#fff;border-bottom-color:#E08500}
+.btn-w{background:#fff;color:var(--green);border:2px solid var(--light);border-bottom:4px solid var(--light)}
+.btn-blk{display:block;width:100%}
+.btn:disabled{opacity:.5;pointer-events:none}
+
+/* Progress Ring */
+.progress-ring{position:relative;width:120px;height:120px;margin:16px auto}
+.progress-ring svg{transform:rotate(-90deg)}
+.progress-ring .bg{fill:none;stroke:#E5E5E5;stroke-width:10}
+.progress-ring .fg{fill:none;stroke:var(--green);stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset .5s}
+.progress-ring .txt{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.progress-ring .big{font-size:32px;font-weight:800;color:var(--green);line-height:1}
+.progress-ring .sub{font-size:11px;color:var(--gray);margin-top:2px}
+
+/* Flashcard */
+.flashcard{background:var(--card);border-radius:var(--radius);padding:36px 24px;min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:var(--shadow);cursor:pointer;margin:12px 16px;transition:transform .2s}
+.flashcard:active{transform:scale(.98)}
+.flashcard .w{font-size:36px;font-weight:800;color:var(--text);letter-spacing:.5px}
+.flashcard .m{font-size:22px;color:#666;margin-top:16px;text-align:center;line-height:1.4}
+.flashcard .hint{font-size:14px;color:var(--gray);margin-top:12px}
+.flashcard .tag{position:absolute;top:14px;right:14px;background:var(--bg);font-size:12px;padding:4px 10px;border-radius:10px;color:var(--gray);font-weight:600}
+
+/* Levels */
+.phase-card{background:var(--card);border-radius:var(--radius);padding:16px;margin:12px 16px;box-shadow:var(--shadow)}
+.phase-card .phase-header{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.phase-card .phase-icon{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px}
+.phase-card .phase-info{flex:1}
+.phase-card .phase-name{font-size:16px;font-weight:700}
+.phase-card .phase-sub{font-size:12px;color:var(--gray)}
+.level-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.level-dot{text-align:center;padding:8px 4px;background:var(--bg);border-radius:12px;font-size:10px;font-weight:600;cursor:pointer;transition:.2s}
+.level-dot.done{background:#E8F8E0;color:var(--green2)}
+.level-dot.today{background:var(--green);color:#fff}
+.level-dot.locked{opacity:.3;pointer-events:none}
+
+/* Quiz */
+.quiz-word{font-size:32px;font-weight:800;text-align:center;padding:24px;color:var(--text)}
+.quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px}
+.quiz-opt{padding:18px 12px;background:var(--card);border:2px solid var(--light);border-radius:14px;font-size:15px;text-align:center;cursor:pointer;transition:.15s;font-weight:500}
+.quiz-opt:active{background:var(--bg)}
+.quiz-opt.correct{border-color:var(--green);background:#E8F8E0;animation:pop .3s}
+.quiz-opt.wrong{border-color:var(--red);background:#FFF0F0;animation:shake .3s}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* Stats */
+.stat-row{display:flex;gap:10px;margin:0 16px 12px}
+.stat-box{flex:1;background:var(--card);border-radius:var(--radius);padding:16px 12px;text-align:center;box-shadow:var(--shadow)}
+.stat-box .num{font-size:28px;font-weight:800;color:var(--green)}
+.stat-box .lbl{font-size:11px;color:var(--gray);margin-top:4px;font-weight:500}
+
+/* Toast */
+.toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.85);color:#fff;padding:14px 28px;border-radius:30px;font-size:15px;font-weight:600;z-index:999;pointer-events:none;animation:ti .3s}
 @keyframes ti{from{opacity:0;transform:translate(-50%,-50%) scale(.8)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
-.empty{text-align:center;padding:40px 20px;color:#999}
-.empty .ic{font-size:48px;margin-bottom:12px}
-#loadingBox{position:fixed;top:0;left:0;right:0;bottom:0;background:#F5F7FA;z-index:99999;display:flex;align-items:center;justify-content:center;flex-direction:column}
-#loadingBox .spinner{width:40px;height:40px;border:4px solid #E8ECF1;border-top-color:#2C3E6B;border-radius:50%;animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Loading */
+#loadingBox{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);z-index:99999;display:flex;align-items:center;justify-content:center;flex-direction:column}
+#loadingBox .owl{font-size:64px;animation:bounce .6s infinite alternate}
+@keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-12px)}}
+#loadingBox p{margin-top:12px;color:var(--gray);font-size:15px;font-weight:500}
+
+/* Celebration */
+.celebrate{position:fixed;top:0;left:0;right:0;bottom:0;z-index:300;display:flex;align-items:center;justify-content:center;pointer-events:none;animation:ceOut .5s 2s forwards}
+@keyframes ceOut{to{opacity:0}}
+.celebrate .text{font-size:48px;animation:ceBounce .4s infinite alternate}
+@keyframes ceBounce{from{transform:scale(1)}to{transform:scale(1.2)}}
+
+/* Modal */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal-box{background:#fff;border-radius:24px;padding:28px 24px;width:100%;max-width:380px;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.15)}
+.modal-box h3{font-size:20px;font-weight:800;margin-bottom:8px}
+.modal-box .score{font-size:56px;font-weight:800;color:var(--green);margin:12px 0}
+
+/* Passage */
+.passage{background:var(--card);border-radius:var(--radius);padding:20px;margin:12px 16px;box-shadow:var(--shadow);line-height:1.8;font-size:14px}
+.passage .pw{font-weight:700;color:var(--green);background:#F0FCE8;padding:1px 5px;border-radius:4px}
+
+/* Review section */
+.review-item{display:flex;align-items:center;justify-content:space-between;padding:16px;background:var(--card);border-radius:16px;margin:8px 16px;box-shadow:0 1px 4px rgba(0,0,0,.04);cursor:pointer}
+.review-item .ri-left{display:flex;align-items:center;gap:12px}
+.review-item .ri-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.review-item .ri-title{font-size:15px;font-weight:600}
+.review-item .ri-sub{font-size:12px;color:var(--gray)}
+.review-item .ri-badge{background:var(--red);color:#fff;font-size:12px;padding:4px 12px;border-radius:12px;white-space:nowrap;font-weight:600}
+
+/* Empty state */
+.empty{text-align:center;padding:60px 20px;color:var(--gray)}
+.empty .ic{font-size:64px;margin-bottom:12px}
+.empty h3{font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px}
+
+/* Day selector horizontal scroll */
+.day-strip{display:flex;gap:8px;padding:0 16px 12px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.day-chip{flex-shrink:0;padding:10px 16px;border-radius:20px;font-size:13px;font-weight:600;background:var(--card);color:var(--text);cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.06);transition:.15s}
+.day-chip.active{background:var(--green);color:#fff}
+.day-chip.done{background:#E8F8E0;color:var(--green2)}
 </style>
 </head>
 <body>
 
+<!-- 加载 -->
 <div id="loadingBox">
-  <div class="spinner"></div>
-  <p style="margin-top:16px;color:#999;font-size:14px" id="loadMsg">正在加载词汇数据...</p>
+  <div class="owl">🦉</div>
+  <p id="loadMsg">学囤囤正在准备...</p>
 </div>
 
+<!-- 主应用 -->
 <div id="app" style="display:none">
-  <div class="header"><h1>学囤囤 · 高考词汇闯关</h1></div>
-  <div id="mainContent" style="padding:16px 16px 100px 16px"></div>
+  <div class="header">
+    <div class="logo"><span class="owl">🦉</span>学囤囤</div>
+    <div class="streak" id="streakBadge">🔥 0天</div>
+  </div>
+  <div id="mainContent"></div>
 </div>
 
+<!-- 底部导航 -->
 <nav class="tabs" id="tabs" style="display:none">
-  <div class="tab active" data-tab="study"><span class="ic">📝</span>今日背诵</div>
-  <div class="tab" data-tab="levels"><span class="ic">🎯</span>闯关挑战</div>
+  <div class="tab active" data-tab="study"><span class="ic">📝</span>今日</div>
+  <div class="tab" data-tab="levels"><span class="ic">🎯</span>闯关</div>
   <div class="tab" data-tab="review"><span class="ic">📊</span>复习<span class="badge" id="rvBadge" style="display:none">0</span></div>
   <div class="tab" data-tab="profile"><span class="ic">👤</span>我的</div>
 </nav>
@@ -78,63 +161,94 @@ body{font-family:'PingFang SC',-apple-system,sans-serif;background:#F5F7FA;color
 // ====== 异步加载词汇数据 ======
 var script = document.createElement('script');
 script.src = 'vocab-data.js';
-script.onload = function(){
-  document.getElementById('loadMsg').textContent = '加载完成，启动中...';
-  setTimeout(initApp, 100);
-};
-script.onerror = function(){
-  document.getElementById('loadMsg').innerHTML = '词汇数据加载失败<br><button onclick="location.reload()" style="margin-top:12px;padding:10px 24px;border-radius:20px;background:#E8734A;color:#fff;border:none;font-size:14px;cursor:pointer">点击重试</button>';
-};
+script.onload = function(){ setTimeout(initApp, 150); };
+script.onerror = function(){ document.getElementById('loadMsg').innerHTML = '加载失败<br><button onclick=location.reload() style="margin-top:12px;padding:10px 24px;border-radius:20px;background:#58CC02;color:#fff;border:none;font-size:14px">重试</button>'; };
 document.head.appendChild(script);
+
+// ====== 常量 ======
+var EBB = [1,2,4,7,15];
+var HIGH_DAILY = 100;  // 高频阶段每天100词
+var FULL_DAILY = 150;  // 正式背诵每天150词
+var PASSAGE_EVERY = 2; // 每2天一篇短文复习
 
 // ====== 状态 ======
 var tab = 'study';
-var fcIdx = 0, fcWords = [];
+var fcIdx = 0, fcWords = [], flipped = false;
 var qzIdx = 0, qzWords = [], qzScore = 0;
-var flipped = false;
-var EBB = [1,2,4,7,15];
 
 function today(){ return new Date().toISOString().slice(0,10); }
 function load(){ try{ return JSON.parse(localStorage.getItem('xd_v')||'{}'); }catch(e){ return {}; } }
 function save(d){ localStorage.setItem('xd_v',JSON.stringify(d)); }
 function toast(m){ var t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(function(){t.remove()},1500); }
 
+// ====== 阶段判断 ======
+function getPhase(p){
+  var done = (p.done||[]).length;
+  if(done < 10) return 'high'; // 高频阶段：通关了0-9关（Level 1-10）
+  return 'full';               // 正式阶段：Level 11+
+}
+
+function getDailyTarget(p){
+  return getPhase(p) === 'high' ? HIGH_DAILY : FULL_DAILY;
+}
+
+function getPhaseDay(p){
+  var done = (p.done||[]).length;
+  if(getPhase(p)==='high') return done + 1;
+  return done - 10 + 1; // 正式阶段天数
+}
+
+function getPhaseName(p){
+  return getPhase(p)==='high' ? '高频速通' : '正式背诵';
+}
+
+// ====== 初始化 ======
 function initApp(){
   document.getElementById('loadingBox').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   document.getElementById('tabs').style.display = 'flex';
+  var p = load();
+  document.getElementById('streakBadge').innerHTML = '🔥 '+(p.days||0)+'天';
   render();
 }
 
+// ====== 路由 ======
 function switchTab(t){ tab=t;document.querySelectorAll('.tab').forEach(function(el){el.classList.toggle('active',el.dataset.tab===t);});render(); }
 document.getElementById('tabs').addEventListener('click',function(e){ var el=e.target.closest('.tab');if(el)switchTab(el.dataset.tab); });
 
+// ====== 获取今日词 ======
 function todayWords(){
-  var p=load(),ts=today(),words=[],unlocked=getUnlocked(p);
-  for(var i=0;i<unlocked.length;i++){ var lv=unlocked[i];
-    for(var j=0;j<lv.words.length;j++){ var w=lv.words[j],ws=p[w.w]||{}; if(!ws.seen)words.push({w:w.w,m:w.m,lid:lv.id,isNew:true}); }
+  var p=load(),ts=today(),words=[];
+  var phase = getPhase(p);
+  var dailyTarget = getDailyTarget(p);
+  var phaseDay = getPhaseDay(p);
+
+  // 阶段内的词（高频Level 1-10 或 正式Level 11-30）
+  var startLv = phase==='high' ? 0 : 10;
+  var endLv = phase==='high' ? 10 : 30;
+
+  // 新词：从未背过的词中按顺序取
+  var newPool = [];
+  for(var i=startLv;i<endLv;i++){ var lv=LEVELS[i];
+    for(var j=0;j<lv.words.length;j++){ var w=lv.words[j],ws=p[w.w]||{}; if(!ws.seen)newPool.push({w:w.w,m:w.m,lid:lv.id,isNew:true}); }
   }
+
+  // 复习词
+  var revPool = [];
   for(var i=0;i<LEVELS.length;i++){ var lv=LEVELS[i];
-    for(var j=0;j<lv.words.length;j++){ var w=lv.words[j],ws=p[w.w]; if(ws&&ws.nr&&ws.nr<=ts&&ws.nr!=='2099-01-01')words.push({w:w.w,m:w.m,lid:lv.id,isRev:true,rnd:ws.rnd||0}); }
+    for(var j=0;j<lv.words.length;j++){ var w=lv.words[j],ws=p[w.w]; if(ws&&ws.nr&&ws.nr<=ts&&ws.nr!=='2099-01-01')revPool.push({w:w.w,m:w.m,lid:lv.id,isRev:true,rnd:ws.rnd||0}); }
   }
-  var nw=words.filter(function(w){return w.isNew;}).slice(0,30);
-  var rw=words.filter(function(w){return w.isRev;});
-  return rw.concat(nw);
+
+  // 复习词全要，新词按每日目标取
+  var newTake = newPool.slice(0, Math.max(0, dailyTarget - revPool.length));
+  return revPool.concat(newTake);
 }
 
-function getUnlocked(p){
-  var u=[];
-  for(var i=0;i<LEVELS.length;i++){ var lv=LEVELS[i];
-    if(lv.id===1){ u.push(lv);continue; }
-    var prev=null; for(var j=0;j<(p.done||[]).length;j++){ if(p.done[j].id===lv.id-1){ prev=p.done[j];break;} }
-    if(prev&&prev.stars>=1)u.push(lv);
-  }
-  return u;
-}
-
+// ====== 渲染 ======
 function render(){
   var p=load(),c=document.getElementById('mainContent');
   updateBadge(p);
+  document.getElementById('streakBadge').innerHTML = '🔥 '+(p.days||0)+'天';
   if(tab==='study')renderStudy(c,p);
   else if(tab==='levels')renderLevels(c,p);
   else if(tab==='review')renderReview(c,p);
@@ -150,49 +264,151 @@ function updateBadge(p){
   if(cnt>0){ b.style.display='inline';b.textContent=cnt>99?'99+':cnt; } else b.style.display='none';
 }
 
+// ====== TAB1: 今日背诵 ======
 function renderStudy(c,p){
-  var words=todayWords();
-  if(!words.length){ c.innerHTML='<div class="empty"><div class="ic">🎉</div><h3>今天没有要背的词</h3><p>去闯关解锁新词吧</p></div>';return; }
-  fcWords=words;fcIdx=0;flipped=false;
-  var nc=words.filter(function(w){return w.isNew;}).length,rc=words.length-nc;
-  c.innerHTML='<div class="card" style="text-align:center"><div class="card-title">📝 今日背诵</div><div style="font-size:13px;color:#999">新词'+nc+' | 复习'+rc+' | 共'+words.length+'词</div><div class="progress-bar"><div class="progress-fill" id="sp" style="width:0%"></div></div></div><div class="flashcard" id="fc" onclick="flip()"><span class="tag" id="fct"></span><div class="w" id="fcw"></div><div class="m" id="fcm" style="display:none"></div><div class="hint" id="fch">点我翻转查看释义</div></div><div id="fca" style="display:none;display:flex;gap:12px;margin-top:16px"><button class="btn btn-b" style="border:2px solid #2C3E6B;color:#2C3E6B;background:transparent" onclick="mark(false)">不认识</button><button class="btn btn-o btn-b" onclick="mark(true)">认识了</button></div><div style="text-align:center;margin-top:12px;font-size:13px;color:#999" id="fcc"></div>';
+  var words = todayWords();
+  var dailyTarget = getDailyTarget(p);
+  var phaseName = getPhaseName(p);
+  var phaseDay = getPhaseDay(p);
+  var isPassageDay = (phaseDay % PASSAGE_EVERY === 0);
+
+  if(words.length === 0 && !isPassageDay){
+    var done = (p.done||[]).length;
+    c.innerHTML = '<div class="empty"><div class="ic">🎉</div><h3>今日任务已完成！</h3><p>'+phaseName+' · 第'+phaseDay+'天 · 已通关'+done+'关</p><button class="btn btn-g btn-blk" style="margin-top:16px;max-width:200px" onclick="switchTab(\'levels\')">去闯关</button></div>';
+    return;
+  }
+
+  // Progress ring
+  var totalPhase = getPhase(p)==='high' ? 971 : (TOTAL - 971);
+  var seenInPhase = 0;
+  var startLv = getPhase(p)==='high' ? 0 : 10;
+  var endLv = getPhase(p)==='high' ? 10 : 30;
+  for(var i=startLv;i<endLv;i++){ var lv=LEVELS[i];
+    for(var j=0;j<lv.words.length;j++){ if(p[lv.words[j].w]&&p[lv.words[j].w].s)seenInPhase++; }
+  }
+  var pct = Math.round(seenInPhase/totalPhase*100);
+  var circumference = 2 * Math.PI * 52;
+  var offset = circumference * (1 - pct/100);
+
+  c.innerHTML =
+    '<div style="text-align:center;padding:16px">' +
+    '<div style="font-size:13px;font-weight:600;color:var(--gray)">'+phaseName+' · 第'+phaseDay+'天</div>' +
+    '<div class="progress-ring">' +
+    '<svg width="120" height="120" viewBox="0 0 120 120"><circle class="bg" cx="60" cy="60" r="52"/><circle class="fg" cx="60" cy="60" r="52" stroke-dasharray="'+circumference+'" stroke-dashoffset="'+offset+'"/></svg>' +
+    '<div class="txt"><div class="big">'+pct+'%</div><div class="sub">'+seenInPhase+'/'+totalPhase+'</div></div></div>' +
+    '<div style="font-size:14px;color:var(--gray);margin-bottom:16px">今日目标 <b style="color:var(--green)">'+dailyTarget+'词</b> | 待背 <b style="color:var(--orange)">'+words.length+'词</b></div>';
+
+  if(isPassageDay && phaseDay > 0){
+    c.innerHTML += '<div class="passage"><b>📖 短文复习日</b><br><span style="font-size:13px;color:var(--gray)">今天需要先完成一篇短文阅读，回顾前2天学过的词</span></div>';
+  }
+
+  c.innerHTML +=
+    '<button class="btn btn-g btn-blk" style="margin:0 16px 12px" onclick="startStudy()">🚀 开始背诵</button>' +
+    (isPassageDay ? '<button class="btn btn-w btn-blk" style="margin:0 16px" onclick="startPassageReview()">📖 短文复习</button>' : '') +
+    '</div>';
+
+  fcWords = words; fcIdx = 0; flipped = false;
+}
+
+function startStudy(){
+  if(fcWords.length === 0){ toast('今天没有要背的词了'); return; }
   showFC();
 }
 
 function showFC(){
-  if(fcIdx>=fcWords.length){ var p=load(); if(p.ld!==today()){ p.days=(p.days||0)+1;p.ld=today();save(p); } c=document.getElementById('mainContent'); c.innerHTML='<div class="empty"><div class="ic">🎉</div><h3>今日背诵完成！</h3><p>连续第'+(p.days||0)+'天</p><button class="btn btn-p" style="margin-top:16px" onclick="switchTab(\'levels\')">去闯关</button></div>';return; }
-  var w=fcWords[fcIdx];flipped=false;
-  document.getElementById('fcw').textContent=w.w;
-  document.getElementById('fcm').textContent=w.m;
-  document.getElementById('fcm').style.display='none';
-  document.getElementById('fch').style.display='block';
-  document.getElementById('fca').style.display='none';
-  document.getElementById('fct').textContent=w.isNew?'新词':'第'+(w.rnd+1)+'次复习';
-  document.getElementById('fct').style.background=w.isNew?'#E8F8F0':'#FFF3E0';
-  document.getElementById('fcc').textContent=(fcIdx+1)+'/'+fcWords.length;
-  document.getElementById('sp').style.width=(fcIdx/fcWords.length*100)+'%';
+  if(fcIdx >= fcWords.length){
+    var p=load();
+    if(p.ld !== today()){ p.days = (p.days||0)+1; p.ld = today(); save(p); }
+    var dailyTarget = getDailyTarget(p);
+    document.getElementById('mainContent').innerHTML =
+      '<div class="empty"><div class="ic">🎉</div><h3>本轮完成！</h3><p>今天背了'+fcWords.length+'个词 · 连续第'+(p.days||0)+'天</p>' +
+      '<button class="btn btn-g btn-blk" style="margin-top:12px;max-width:200px" onclick="switchTab(\'levels\')">去闯关测试</button>' +
+      '<button class="btn btn-w btn-blk" style="margin-top:8px;max-width:200px" onclick="switchTab(\'study\')">回主页</button></div>';
+    return;
+  }
+  var w = fcWords[fcIdx]; flipped = false;
+  document.getElementById('mainContent').innerHTML =
+    '<div style="padding:8px 16px"><div style="font-size:13px;color:var(--gray);text-align:center;margin-bottom:8px">'+(fcIdx+1)+' / '+fcWords.length+'</div>' +
+    '<div class="flashcard" id="fc" onclick="flip()"><span class="tag">'+(w.isNew?'新词':'复习')+'</span><div class="w" id="fcw">'+w.w+'</div><div class="m" id="fcm" style="display:none">'+w.m+'</div><div class="hint" id="fch">👆 点我查看释义</div></div>' +
+    '<div id="fca" style="display:none;display:flex;gap:10px;padding:0 16px;margin-top:12px">' +
+    '<button class="btn btn-w btn-blk" onclick="mark(false)">还不认识</button>' +
+    '<button class="btn btn-g btn-blk" onclick="mark(true)">已经认识</button></div></div>';
+  window.scrollTo(0,0);
 }
 
 function flip(){ if(flipped)return;flipped=true;document.getElementById('fcm').style.display='block';document.getElementById('fch').style.display='none';document.getElementById('fca').style.display='flex'; }
 
 function mark(ok){
   var w=fcWords[fcIdx],p=load(),k=w.w,ws=p[k]||{s:false,c:0,w:0,rnd:0,nr:''};
-  ws.s=true; if(ok){ ws.c++;p.tc=(p.tc||0)+1;ws.rnd=Math.min(ws.rnd+1,EBB.length);
+  ws.s=true;
+  if(ok){ ws.c++;p.tc=(p.tc||0)+1;ws.rnd=Math.min(ws.rnd+1,EBB.length);
     if(ws.rnd<EBB.length){ var d=new Date();d.setDate(d.getDate()+EBB[ws.rnd]);ws.nr=d.toISOString().slice(0,10); } else ws.nr='2099-01-01';
   }else{ ws.w++;p.tw=(p.tw||0)+1;ws.rnd=0;var d=new Date();d.setDate(d.getDate()+1);ws.nr=d.toISOString().slice(0,10); }
   p[k]=ws;save(p);fcIdx++;showFC();
 }
 
+function startPassageReview(){
+  // 构造短文复习：收集前2天背过的高频词，生成短文
+  toast('短文复习功能开发中...');
+}
+
+// ====== TAB2: 闯关 ======
 function renderLevels(c,p){
-  var unlocked=getUnlocked(p),uid={};
-  for(var i=0;i<unlocked.length;i++)uid[unlocked[i].id]=true;
-  var h='<div class="card"><div class="card-title">🎯 闯关挑战</div><div style="font-size:13px;color:#999">30关 · 通关解锁下一关</div></div><div class="level-grid">';
-  for(var i=0;i<LEVELS.length;i++){ var lv=LEVELS[i],done=null;
-    for(var j=0;j<(p.done||[]).length;j++){ if(p.done[j].id===lv.id){ done=p.done[j];break;} }
-    var lk=!uid[lv.id],tc=lv.tier==='high'?'#E74C3C':lv.tier==='mid'?'#2C3E6B':'#999';
-    h+='<div class="level-item'+(lk?' locked':'')+'"'+(lk?'':' onclick="startQuiz('+lv.id+')"')+'>'+(lk?'<div style="position:absolute;top:6px;right:8px">🔒</div>':'')+'<div class="lv-num" style="color:'+tc+'">Lv'+lv.id+'</div><div class="lv-name">'+lv.name.slice(0,6)+'</div><div style="font-size:14px;margin-top:4px">'+(done?'⭐'.repeat(done.stars):'☆☆☆')+'</div></div>';
+  var phase = getPhase(p);
+  var phaseName = getPhaseName(p);
+  var phaseDay = getPhaseDay(p);
+  var done = (p.done||[]).length;
+
+  // 高频阶段进度
+  var highDone = 0;
+  for(var i=0;i<10;i++){ var lv=LEVELS[i]; var isDone=false;
+    for(var j=0;j<(p.done||[]).length;j++){ if(p.done[j].id===lv.id&&p.done[j].stars>=2){ isDone=true;break; } }
+    if(isDone)highDone++;
   }
-  h+='</div>';c.innerHTML=h;
+
+  var h = '<div class="phase-card"><div class="phase-header">' +
+    '<div class="phase-icon" style="background:#FFF3E0">🔥</div>' +
+    '<div class="phase-info"><div class="phase-name">高频速通</div><div class="phase-sub">Level 1-10 · 971个核心词 · 100词/天</div></div>' +
+    '<div style="font-size:28px;font-weight:800;color:var(--orange)">'+highDone+'<span style="font-size:14px;color:var(--gray)">/10</span></div></div>' +
+    '<div style="height:6px;background:#E5E5E5;border-radius:3px;overflow:hidden"><div style="height:100%;background:var(--orange);width:'+(highDone*10)+'%"></div></div>' +
+    '<div class="level-grid">';
+  for(var i=0;i<10;i++){ var lv=LEVELS[i]; var isDone=false,stars=0;
+    for(var j=0;j<(p.done||[]).length;j++){ if(p.done[j].id===lv.id){ isDone=true;stars=p.done[j].stars;break; } }
+    var cls = isDone ? 'done' : (i===highDone ? 'today' : (i>highDone ? 'locked' : 'done'));
+    h += '<div class="level-dot '+cls+'"'+(cls!=='locked'?' onclick="startQuiz('+lv.id+')"':'')+'>Lv'+(i+1)+'<br>'+(isDone?'⭐'+stars:'-')+'</div>';
+  }
+  h += '</div></div>';
+
+  // 正式阶段（高频没通关完就锁定）
+  var fullDone = 0;
+  for(var i=10;i<30;i++){ var lv=LEVELS[i];
+    for(var j=0;j<(p.done||[]).length;j++){ if(p.done[j].id===lv.id&&p.done[j].stars>=2)fullDone++; }
+  }
+
+  h += '<div class="phase-card"><div class="phase-header">' +
+    '<div class="phase-icon" style="background:#E8F0FF">📚</div>' +
+    '<div class="phase-info"><div class="phase-name">正式背诵</div><div class="phase-sub">Level 11-30 · 2975词 · 150词/天</div></div>' +
+    '<div style="font-size:28px;font-weight:800;color:var(--blue)">'+fullDone+'<span style="font-size:14px;color:var(--gray)">/20</span></div></div>' +
+    '<div style="height:6px;background:#E5E5E5;border-radius:3px;overflow:hidden"><div style="height:100%;background:var(--blue);width:'+(fullDone*5)+'%"></div></div>';
+
+  if(highDone >= 10){
+    h += '<div class="level-grid">';
+    for(var i=10;i<30;i++){ var lv=LEVELS[i]; var isDone=false,stars=0;
+      for(var j=0;j<(p.done||[]).length;j++){ if(p.done[j].id===lv.id){ isDone=true;stars=p.done[j].stars;break; } }
+      var unlocked = (i===10) || (function(){
+        for(var j=0;j<(p.done||[]).length;j++){ if(p.done[j].id===i&&p.done[j].stars>=2)return true; }
+        return false;
+      })();
+      var cls = isDone ? 'done' : (!unlocked && i>10 ? 'locked' : '');
+      h += '<div class="level-dot '+cls+'"'+(cls!=='locked'?' onclick="startQuiz('+lv.id+')"':'')+'>Lv'+(i+1)+'<br>'+(isDone?'⭐'+stars:'-')+'</div>';
+    }
+    h += '</div>';
+  } else {
+    h += '<div style="text-align:center;padding:16px;color:var(--gray);font-size:13px">🔒 完成高频速通后解锁</div>';
+  }
+  h += '</div>';
+
+  c.innerHTML = h;
 }
 
 function startQuiz(id){
@@ -210,36 +426,63 @@ function showQuiz(){
   var wrong=all.filter(function(x){return x.w!==w.w;}).sort(function(){return Math.random()-.5}).slice(0,3).map(function(x){return x.m;});
   var opts=wrong.concat([w.m]).sort(function(){return Math.random()-.5});
   var ci=opts.indexOf(w.m);
-  document.getElementById('mainContent').innerHTML='<div class="card" style="text-align:center"><div class="card-title">Level '+qzWords[0].lid+' 闯关</div><div style="font-size:13px;color:#999">'+(qzIdx+1)+'/'+qzWords.length+' | '+qzScore+'分</div><div class="progress-bar"><div class="progress-fill" style="width:'+(qzIdx/qzWords.length*100)+'%"></div></div></div><div class="quiz-word">'+w.w+'</div><div class="quiz-options" id="qzOpts">'+opts.map(function(o,i){return '<div class="quiz-opt" data-ci="'+(i===ci)+'" onclick="answerQuiz(this)">'+o+'</div>';}).join('')+'</div><button class="btn btn-b" style="border:2px solid #2C3E6B;color:#2C3E6B;background:transparent;margin-top:16px" onclick="switchTab(\'levels\')">退出</button>';
+  document.getElementById('mainContent').innerHTML =
+    '<div style="text-align:center;padding:16px"><div style="font-size:14px;color:var(--gray);font-weight:600">Level '+qzWords[0].lid+' 闯关测试</div>' +
+    '<div style="font-size:13px;color:var(--gray);margin-top:4px">'+(qzIdx+1)+'/'+qzWords.length+' · '+qzScore+'分</div>' +
+    '<div style="height:4px;background:#E5E5E5;border-radius:2px;margin:12px 0;overflow:hidden"><div style="height:100%;background:var(--green);width:'+(qzIdx/qzWords.length*100)+'%"></div></div></div>' +
+    '<div class="quiz-word">'+w.w+'</div>' +
+    '<div class="quiz-options" id="qzOpts">'+opts.map(function(o,i){return '<div class="quiz-opt" data-ci="'+(i===ci)+'" onclick="answerQuiz(this)">'+o+'</div>';}).join('')+'</div>' +
+    '<div style="text-align:center;margin-top:16px"><button class="btn btn-w" onclick="switchTab(\'levels\')">退出</button></div>';
 }
 
 function answerQuiz(el){
   var ok=el.dataset.ci==='true',opts=document.querySelectorAll('#qzOpts .quiz-opt');
   for(var i=0;i<opts.length;i++)opts[i].style.pointerEvents='none';
-  if(ok){ el.classList.add('correct');qzScore++;toast('对!'); }
-  else{ el.classList.add('wrong');for(var i=0;i<opts.length;i++)if(opts[i].dataset.ci==='true')opts[i].classList.add('correct');toast('错!'); }
-  setTimeout(function(){ qzIdx++;showQuiz(); },800);
+  if(ok){ el.classList.add('correct');qzScore++; } else{ el.classList.add('wrong');for(var i=0;i<opts.length;i++)if(opts[i].dataset.ci==='true')opts[i].classList.add('correct'); }
+  setTimeout(function(){ qzIdx++;showQuiz(); },700);
 }
 
 function finishQuiz(){
-  var pct=Math.round(qzScore/qzWords.length*100),stars=pct>=95?3:pct>=80?2:pct>=60?1:0,ok=stars>=2;
+  var pct=Math.round(qzScore/qzWords.length*100),stars=pct>=95?3:pct>=80?2:pct>=60?1:0,passed=stars>=2;
   var p=load(),lvId=qzWords[0].lid,ex=null;
   for(var i=0;i<(p.done||[]).length;i++)if(p.done[i].id===lvId)ex=p.done[i];
   if(!ex||stars>ex.stars){ if(ex){ ex.stars=stars;ex.date=today(); } else{ p.done=(p.done||[]);p.done.push({id:lvId,stars:stars,date:today()}); } save(p); }
-  document.getElementById('mainContent').innerHTML='<div class="empty"><div class="ic">'+(ok?'🎉':'💪')+'</div><h3>'+(ok?'恭喜通关！':'继续加油！')+'</h3><p>正确率'+pct+'% | '+qzScore+'/'+qzWords.length+'</p><div style="font-size:32px">'+'⭐'.repeat(stars)+'☆'.repeat(3-stars)+'</div>'+(ok&&lvId<30?'<button class="btn btn-o" style="margin-top:12px" onclick="startQuiz('+(lvId+1)+')">下一关</button>':'')+(stars<2?'<button class="btn btn-o" style="margin-top:12px" onclick="startQuiz('+lvId+')">重新挑战</button>':'')+'<button class="btn btn-p" style="margin-top:8px" onclick="switchTab(\'levels\')">返回</button></div>';
+
+  document.getElementById('mainContent').innerHTML =
+    '<div class="empty"><div class="ic">'+(passed?'🎉':'💪')+'</div><h3>'+(passed?'通关成功！':'继续加油')+'</h3>' +
+    '<p style="font-size:15px;margin:4px 0">正确率 '+pct+'% · '+qzScore+'/'+qzWords.length+'</p>' +
+    '<div style="font-size:40px;margin:8px 0">'+'⭐'.repeat(stars)+'☆'.repeat(3-stars)+'</div>' +
+    (passed&&lvId<30?'<button class="btn btn-g btn-blk" style="max-width:200px;margin:8px auto" onclick="startQuiz('+(lvId+1)+')">下一关 →</button>':'')+
+    (stars<2?'<button class="btn btn-o btn-blk" style="max-width:200px;margin:8px auto" onclick="startQuiz('+lvId+')">重新挑战</button>':'')+
+    '<button class="btn btn-w btn-blk" style="max-width:200px;margin:8px auto" onclick="switchTab(\'levels\')">返回闯关</button>'+
+    (passed?'<button class="btn btn-b btn-blk" style="max-width:200px;margin:8px auto" onclick="shareResult('+lvId+','+pct+','+stars+')">📤 分享成绩给教务老师</button>':'')+'</div>';
 }
 
+function shareResult(lvId,pct,stars){
+  var p=load(),seen=Object.keys(p).filter(function(k){return p[k]&&p[k].s;}).length;
+  var txt='【学囤囤·词汇闯关】\\n通关 Level '+lvId+'！\\n正确率：'+pct+'% '+'⭐'.repeat(stars)+'\\n累计已学：'+seen+'/'+TOTAL+'词\\n连续学习：'+(p.days||0)+'天\\n\\n'+today();
+  if(navigator.share){ navigator.share({title:'闯关成绩单',text:txt}); }
+  else{
+    var ov=document.createElement('div');ov.className='modal-overlay';
+    ov.innerHTML='<div class="modal-box"><h3>🏆 闯关成绩单</h3><div class="score">'+pct+'%</div><div style="font-size:24px">'+'⭐'.repeat(stars)+'</div><div style="font-size:13px;color:var(--gray);margin:8px 0">Level '+lvId+' · '+seen+'/'+TOTAL+'词已学</div><div style="background:var(--bg);padding:12px;border-radius:12px;font-size:13px;text-align:left;white-space:pre-wrap;margin:8px 0">'+txt.replace(/\\n/g,'<br>')+'</div><button class="btn btn-g btn-blk" onclick="navigator.clipboard.writeText(this.parentElement.querySelector(\'div\').textContent).then(function(){alert(\'已复制，发送给老师吧！\')})">📋 一键复制发送</button></div>';
+    document.body.appendChild(ov);ov.addEventListener('click',function(e){if(e.target===ov)ov.remove();});
+  }
+}
+
+// ====== TAB3: 复习 ======
 function renderReview(c,p){
   var ts=today(),words=[];
   for(var i=0;i<LEVELS.length;i++){ var lv=LEVELS[i];
     for(var j=0;j<lv.words.length;j++){ var w=lv.words[j],ws=p[w.w];if(ws&&ws.nr&&ws.nr<=ts&&ws.nr!=='2099-01-01')words.push({w:w.w,m:w.m,lid:lv.id,name:lv.name}); }
   }
-  if(!words.length){ c.innerHTML='<div class="empty"><div class="ic">✅</div><h3>没有待复习的词</h3><p>按计划复习中</p></div>';return; }
+  if(!words.length){ c.innerHTML='<div class="empty"><div class="ic">✅</div><h3>没有待复习的词</h3><p>艾宾浩斯计划进行中</p></div>';return; }
   var grp={};
   for(var i=0;i<words.length;i++){ var rw=words[i];if(!grp[rw.lid])grp[rw.lid]={name:rw.name,words:[]};grp[rw.lid].words.push(rw); }
-  var h='<div class="card"><div class="card-title">📊 复习提醒</div><div style="font-size:13px;color:#999">今日待复习 '+words.length+' 词</div></div>';
+  var h='<div style="padding:16px 16px 0"><div style="font-size:22px;font-weight:800;margin-bottom:4px">📊 复习提醒</div><div style="font-size:13px;color:var(--gray);margin-bottom:8px">基于艾宾浩斯遗忘曲线 · 今日待复习 <b style="color:var(--red)">'+words.length+'</b> 词</div></div>';
   var keys=Object.keys(grp);
-  for(var i=0;i<keys.length;i++){ var g=grp[keys[i]];h+='<div class="card" style="cursor:pointer" onclick="reviewLevel('+keys[i]+')"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:15px;font-weight:600">'+g.name+'</div><div style="font-size:12px;color:#999">'+g.words.length+'词</div></div><span style="background:#E74C3C;color:#fff;padding:6px 14px;border-radius:15px;font-size:13px">去复习</span></div></div>'; }
+  for(var i=0;i<keys.length;i++){ var g=grp[keys[i]];
+    h+='<div class="review-item" onclick="reviewLevel('+keys[i]+')"><div class="ri-left"><div class="ri-icon" style="background:#FFF0F0">📝</div><div><div class="ri-title">'+g.name+'</div><div class="ri-sub">'+g.words.length+'个词待复习</div></div></div><div class="ri-badge">去复习</div></div>';
+  }
   c.innerHTML=h;
 }
 
@@ -248,29 +491,32 @@ function reviewLevel(id){
   for(var i=0;i<LEVELS.length;i++)if(LEVELS[i].id===id)lv=LEVELS[i];
   if(!lv)return;
   fcWords=[];for(var i=0;i<lv.words.length;i++){ var w=lv.words[i],ws=p[w.w];if(ws&&ws.nr&&ws.nr<=ts&&ws.nr!=='2099-01-01')fcWords.push({w:w.w,m:w.m,lid:lv.id,isRev:true,rnd:ws.rnd||0}); }
-  fcIdx=0;flipped=false;switchTab('study');
-  setTimeout(function(){
-    document.getElementById('mainContent').innerHTML='<div class="card" style="text-align:center"><div class="card-title">📊 复习模式</div><div style="font-size:13px;color:#999">'+lv.name+' · '+fcWords.length+'词</div><div class="progress-bar"><div class="progress-fill" id="sp" style="width:0%"></div></div></div><div class="flashcard" id="fc" onclick="flip()"><span class="tag" id="fct"></span><div class="w" id="fcw"></div><div class="m" id="fcm" style="display:none"></div><div class="hint" id="fch">点我翻转</div></div><div id="fca" style="display:none;display:flex;gap:12px;margin-top:16px"><button class="btn btn-b" style="border:2px solid #2C3E6B;color:#2C3E6B;background:transparent" onclick="mark(false)">不认识</button><button class="btn btn-o btn-b" onclick="mark(true)">认识了</button></div><div style="text-align:center;margin-top:12px;font-size:13px;color:#999" id="fcc"></div>';
-    showFC();
-  },100);
+  fcIdx=0;flipped=false;switchTab('study');showFC();
 }
 
+// ====== TAB4: 我的 ======
 function renderProfile(c,p){
   var seen=Object.keys(p).filter(function(k){return p[k]&&p[k].s;}).length;
+  var mastered=Object.keys(p).filter(function(k){return p[k]&&p[k].nr==='2099-01-01';}).length;
   var done=(p.done||[]).length,acc=p.tc+p.tw>0?Math.round(p.tc/(p.tc+p.tw)*100):0;
-  c.innerHTML='<div class="card"><div class="card-title">👤 我的进度</div></div><div class="stat-row"><div class="stat-box"><div class="num">'+(p.days||0)+'</div><div class="lbl">学习天数</div></div><div class="stat-box"><div class="num">'+seen+'</div><div class="lbl">已学词汇</div></div><div class="stat-box"><div class="num">'+done+'/30</div><div class="lbl">通关关卡</div></div></div><div class="stat-row"><div class="stat-box"><div class="num">'+acc+'%</div><div class="lbl">正确率</div></div><div class="stat-box"><div class="num">'+(TOTAL-seen)+'</div><div class="lbl">剩余词汇</div></div><div class="stat-box"><div class="num">'+(p.tc||0)+'</div><div class="lbl">正确次数</div></div></div><button class="btn btn-o btn-b" onclick="share()" style="margin-bottom:8px">📤 分享进度给教务老师</button><button class="btn btn-b" style="border:2px solid #2C3E6B;color:#2C3E6B;background:transparent" onclick="if(confirm(\'确定重置？\')){localStorage.removeItem(\'xd_v\');render();}">🔄 重置进度</button>';
+  var phase=getPhase(p),phaseDay=getPhaseDay(p);
+  c.innerHTML=
+    '<div style="padding:20px 16px 0"><div style="font-size:22px;font-weight:800;margin-bottom:4px">👤 我的进度</div><div style="font-size:13px;color:var(--gray)">'+getPhaseName(p)+' · 第'+phaseDay+'天</div></div>'+
+    '<div class="stat-row" style="margin-top:12px"><div class="stat-box"><div class="num">'+(p.days||0)+'</div><div class="lbl">学习天数</div></div><div class="stat-box"><div class="num">'+seen+'</div><div class="lbl">已学词汇</div></div><div class="stat-box"><div class="num">'+mastered+'</div><div class="lbl">已掌握</div></div></div>'+
+    '<div class="stat-row"><div class="stat-box"><div class="num">'+acc+'%</div><div class="lbl">正确率</div></div><div class="stat-box"><div class="num">'+done+'/30</div><div class="lbl">通关关卡</div></div><div class="stat-box"><div class="num">'+(TOTAL-seen)+'</div><div class="lbl">剩余词汇</div></div></div>'+
+    '<button class="btn btn-g btn-blk" style="margin:0 16px 8px" onclick="shareAll()">📤 分享完整进度</button>'+
+    '<button class="btn btn-w btn-blk" style="margin:0 16px" onclick="if(confirm(\'确定重置所有进度？此操作不可恢复。\')){localStorage.removeItem(\'xd_v\');location.reload();}">🔄 重置进度</button>';
 }
 
-function share(){
+function shareAll(){
   var p=load(),seen=Object.keys(p).filter(function(k){return p[k]&&p[k].s;}).length;
-  var m=Object.keys(p).filter(function(k){return p[k]&&p[k].nr==='2099-01-01';}).length;
+  var mastered=Object.keys(p).filter(function(k){return p[k]&&p[k].nr==='2099-01-01';}).length;
   var acc=p.tc+p.tw>0?Math.round(p.tc/(p.tc+p.tw)*100):0;
-  var txt='【学囤囤 词汇闯关】\\n学习天数：'+(p.days||0)+'天\\n已学：'+seen+'/'+TOTAL+'\\n掌握：'+m+'词\\n正确率：'+acc+'%\\n通关：'+(p.done||[]).length+'/30关\\n'+today();
+  var txt='【学囤囤·词汇闯关】学习报告\\n\\uD83D\uDCC5 学习天数：'+(p.days||0)+'天\\n\\uD83D\uDCDA 已学词汇：'+seen+'/'+TOTAL+'\\n\\u2705 已掌握：'+mastered+'词\\n\\uD83C\uDFAF 正确率：'+acc+'%\\n\\uD83C\uDFC6 通关关卡：'+(p.done||[]).length+'/30关\\n\\uD83D\uDCC5 '+today();
   if(navigator.share){ navigator.share({title:'学习报告',text:txt}); }
   else{
-    var ov=document.createElement('div');ov.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center';
-    ov.innerHTML='<div style="background:#fff;border-radius:14px;padding:24px;width:90%;max-width:400px"><h3>分享进度</h3><div style="background:#F5F7FA;padding:12px;border-radius:8px;font-size:13px;margin:12px 0;white-space:pre-wrap">'+txt.replace(/\\n/g,'<br>')+'</div><button class="btn btn-p btn-b" onclick="var p=this.closest(\'div\').parentElement;navigator.clipboard.writeText(p._txt).then(function(){alert(\'已复制！\');p.remove();})">一键复制</button></div>';
-    ov.querySelector('[style]')._txt=txt;
+    var ov=document.createElement('div');ov.className='modal-overlay';
+    ov.innerHTML='<div class="modal-box"><h3>📊 学习报告</h3><div style="background:var(--bg);padding:12px;border-radius:12px;font-size:13px;text-align:left;white-space:pre-wrap;margin:8px 0">'+txt.replace(/\\n/g,'<br>')+'</div><button class="btn btn-g btn-blk" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent).then(function(){alert(\'已复制！\')})">📋 一键复制发送</button></div>';
     document.body.appendChild(ov);ov.addEventListener('click',function(e){if(e.target===ov)ov.remove();});
   }
 }
