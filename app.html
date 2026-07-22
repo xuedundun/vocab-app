@@ -606,7 +606,7 @@ function renderProfile(c,p){
     '<div class="stat-row" style="margin-top:16px"><div class="stat-box"><div class="num">'+(p.days||0)+'</div><div class="lbl">学习天数</div></div><div class="stat-box"><div class="num">'+seen+'</div><div class="lbl">已学词汇</div></div><div class="stat-box"><div class="num">'+mastered+'</div><div class="lbl">已掌握</div></div></div>'+
     '<div class="stat-row"><div class="stat-box"><div class="num">'+acc+'%</div><div class="lbl">正确率</div></div><div class="stat-box"><div class="num">'+done+'/30</div><div class="lbl">通关关卡</div></div><div class="stat-box"><div class="num">'+(TOTAL-seen)+'</div><div class="lbl">剩余词汇</div></div></div>'+
     '<div style="padding:0 40px"><button class="btn btn-r btn-blk" onclick="generateProfileCard()">生成学习报告 · 发送给教务老师</button></div>'+
-    '<button class="btn btn-w btn-blk" style="margin:0 16px" onclick="if(confirm(\'确定重置？\')){localStorage.removeItem(\'xd_v\');location.reload();}">重置进度</button>';
+    '<div style="padding:0 40px;margin-top:8px"><button class="btn btn-w btn-blk" onclick="if(confirm(\'确定重置？\')){localStorage.removeItem(\'xd_v\');location.reload();}">重置进度</button></div>';
 }
 
 function generateProfileCard(){
