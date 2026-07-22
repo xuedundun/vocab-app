@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>学囤囤 · 教务管理后台</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC',-apple-system,sans-serif;background:#F5F7FA;color:#333;max-width:600px;margin:0 auto;padding:16px}
+h1{font-size:20px;color:#2C3E6B;margin-bottom:4px}
+.sub{font-size:13px;color:#999;margin-bottom:20px}
+.card{background:#fff;border-radius:14px;padding:16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.card h2{font-size:16px;color:#2C3E6B;margin-bottom:8px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 6px;text-align:left;border-bottom:1px solid #eee}
+th{color:#999;font-weight:600;font-size:11px}
+.badge{padding:3px 8px;border-radius:10px;font-size:11px}
+.badge-free{background:#E8F8F0;color:#27AE60}
+.badge-used{background:#FFF3E0;color:#E8734A}
+.btn{padding:10px 20px;border-radius:20px;border:none;font-size:14px;font-weight:600;cursor:pointer}
+.btn-primary{background:#2C3E6B;color:#fff}
+.btn-orange{background:#E8734A;color:#fff}
+.btn-outline{background:transparent;border:2px solid #2C3E6B;color:#2C3E6B}
+.btn-sm{padding:6px 14px;font-size:12px}
+input{padding:10px 14px;border-radius:10px;border:2px solid #E8ECF1;font-size:14px;width:100%}
+.row{display:flex;gap:8px;align-items:center;margin-top:8px}
+.status-bar{display:flex;gap:16px;margin-bottom:16px}
+.stat{flex:1;background:#fff;border-radius:12px;padding:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.stat .num{font-size:24px;font-weight:700;color:#2C3E6B}
+.stat .label{font-size:11px;color:#999}
+.hidden{display:none}
+#loginScreen{position:fixed;top:0;left:0;right:0;bottom:0;background:#2C3E6B;display:flex;align-items:center;justify-content:center;z-index:999}
+#loginBox{background:#fff;border-radius:16px;padding:30px;width:90%;max-width:360px;text-align:center}
+</style>
+</head>
+<body>
+
+<!-- 登录 -->
+<div id="loginScreen">
+  <div id="loginBox">
+    <h2 style="margin-bottom:16px">🔐 教务管理登录</h2>
+    <input id="adminPwd" type="password" placeholder="请输入管理密码" style="text-align:center;font-size:16px">
+    <div id="loginError" style="color:#E74C3C;font-size:13px;margin-top:8px;min-height:20px"></div>
+    <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="login()">进入管理后台</button>
+    <p style="font-size:11px;color:#999;margin-top:12px">默认密码: xdd2026（请及时修改）</p>
+  </div>
+</div>
+
+<!-- 主面板（默认隐藏） -->
+<div id="mainPanel" class="hidden">
+  <h1>📋 学囤囤 · 教务管理后台</h1>
+  <div class="sub">邀请码管理 · 学员追踪 · 数据概览</div>
+
+  <div class="status-bar">
+    <div class="stat"><div class="num" id="totalCodes">200</div><div class="label">总邀请码</div></div>
+    <div class="stat"><div class="num" id="usedCodes">0</div><div class="label">已发放</div></div>
+    <div class="stat"><div class="num" id="activeStudents">0</div><div class="label">已激活学员</div></div>
+  </div>
+
+  <div class="card">
+    <h2>📤 发放新邀请码</h2>
+    <div class="row">
+      <input id="studentName" placeholder="学员姓名（选填）">
+      <button class="btn btn-orange btn-sm" onclick="assignCode()" style="white-space:nowrap">发放 →</button>
+    </div>
+    <div id="assignResult" style="margin-top:8px;font-size:14px;font-weight:600;color:#27AE60"></div>
+  </div>
+
+  <div class="card">
+    <h2>📊 邀请码使用记录</h2>
+    <div style="max-height:400px;overflow-y:auto">
+      <table id="codeTable">
+        <thead><tr><th>邀请码</th><th>学员</th><th>发放时间</th><th>状态</th><th>操作</th></tr></thead>
+        <tbody id="codeTableBody"></tbody>
+      </table>
+    </div>
+    <div id="emptyMsg" style="text-align:center;padding:30px;color:#999">暂无记录。发放邀请码后这里会显示。</div>
+  </div>
+
+  <div class="card">
+    <h2>🔧 设置</h2>
+    <button class="btn btn-outline btn-sm" onclick="exportData()">📥 导出数据 (CSV)</button>
+    <button class="btn btn-outline btn-sm" onclick="changePassword()" style="margin-left:8px">🔑 修改管理密码</button>
+    <button class="btn btn-outline btn-sm" onclick="resetAll()" style="margin-left:8px;color:#E74C3C;border-color:#E74C3C">⚠️ 重置</button>
+  </div>
+</div>
+
+<script>
+const ADMIN_KEY = 'xuedundun_admin';
+const DEFAULT_PWD = 'xdd2026';
+
+function login() {
+  const pwd = document.getElementById('adminPwd').value.trim();
+  const savedPwd = localStorage.getItem(ADMIN_KEY + '_pwd') || DEFAULT_PWD;
+  if (pwd === savedPwd) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('mainPanel').classList.remove('hidden');
+    loadData();
+  } else {
+    document.getElementById('loginError').textContent = '密码错误';
+  }
+}
+
+// 回车登录
+document.getElementById('adminPwd').addEventListener('keydown', e => {
+  if (e.key === 'Enter') login();
+});
+
+function loadData() {
+  const records = JSON.parse(localStorage.getItem(ADMIN_KEY + '_records') || '[]');
+  const codes = JSON.parse(localStorage.getItem(ADMIN_KEY + '_codes') || '[]');
+
+  // 初始化预生成码（首次使用）
+  if (codes.length === 0) {
+    fetch('invite-codes-plain.txt').then(r => r.text()).then(t => {
+      const lines = t.split('\n').filter(l => l.match(/^\d+\s+XDD-/));
+      const initCodes = lines.map(l => {
+        const parts = l.trim().split(/\s+/);
+        return parts[1];
+      }).filter(Boolean);
+      localStorage.setItem(ADMIN_KEY + '_codes', JSON.stringify(initCodes));
+      loadData();
+    }).catch(() => {
+      // 离线模式：从CSV读取
+      fetch('invite-codes.csv').then(r => r.text()).then(t => {
+        const initCodes = t.split('\n').slice(1).filter(l => l.includes('XDD-')).map(l => l.split(',')[1]);
+        localStorage.setItem(ADMIN_KEY + '_codes', JSON.stringify(initCodes));
+        loadData();
+      });
+    });
+    return;
+  }
+
+  document.getElementById('totalCodes').textContent = codes.length;
+  document.getElementById('usedCodes').textContent = records.length;
+  document.getElementById('activeStudents').textContent = records.filter(r => r.status === '已激活').length;
+
+  const tbody = document.getElementById('codeTableBody');
+  const emptyMsg = document.getElementById('emptyMsg');
+
+  if (records.length === 0) {
+    tbody.innerHTML = '';
+    emptyMsg.style.display = 'block';
+  } else {
+    emptyMsg.style.display = 'none';
+    tbody.innerHTML = records.slice().reverse().map(r => `
+      <tr>
+        <td><code>${r.code}</code></td>
+        <td>${r.student || '—'}</td>
+        <td>${r.date || '—'}</td>
+        <td><span class="badge ${r.status === '已激活' ? 'badge-free' : 'badge-used'}">${r.status || '已发放'}</span></td>
+        <td>
+          <button class="btn btn-outline btn-sm" onclick="toggleStatus('${r.code}')">${r.status === '已激活' ? '标为未激活' : '标为已激活'}</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+}
+
+function assignCode() {
+  const codes = JSON.parse(localStorage.getItem(ADMIN_KEY + '_codes') || '[]');
+  const records = JSON.parse(localStorage.getItem(ADMIN_KEY + '_records') || '[]');
+  const usedCodes = new Set(records.map(r => r.code));
+  const available = codes.filter(c => !usedCodes.has(c));
+
+  if (available.length === 0) {
+    document.getElementById('assignResult').textContent = '所有邀请码已发放完毕！请生成新码';
+    document.getElementById('assignResult').style.color = '#E74C3C';
+    return;
+  }
+
+  const code = available[0];
+  const name = document.getElementById('studentName').value.trim() || '未记录';
+  const today = new Date().toISOString().slice(0,10);
+
+  records.push({ code, student: name, date: today, status: '已发放' });
+  localStorage.setItem(ADMIN_KEY + '_records', JSON.stringify(records));
+
+  document.getElementById('assignResult').innerHTML = `✅ 邀请码: <strong>${code}</strong><br>学员: ${name}<br><small style="color:#999">请将此码发给学员，在App中输入激活</small>`;
+  document.getElementById('assignResult').style.color = '#27AE60';
+  document.getElementById('studentName').value = '';
+  loadData();
+}
+
+function toggleStatus(code) {
+  const records = JSON.parse(localStorage.getItem(ADMIN_KEY + '_records') || '[]');
+  const r = records.find(r => r.code === code);
+  if (r) r.status = r.status === '已激活' ? '已发放' : '已激活';
+  localStorage.setItem(ADMIN_KEY + '_records', JSON.stringify(records));
+  loadData();
+}
+
+function exportData() {
+  const records = JSON.parse(localStorage.getItem(ADMIN_KEY + '_records') || '[]');
+  let csv = '邀请码,学员姓名,发放日期,状态\n';
+  records.forEach(r => csv += `${r.code},${r.student},${r.date},${r.status}\n`);
+  const blob = new Blob(['﻿' + csv], {type: 'text/csv;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = '邀请码记录.csv'; a.click();
+}
+
+function changePassword() {
+  const newPwd = prompt('请输入新管理密码（至少6位）：');
+  if (newPwd && newPwd.length >= 6) {
+    localStorage.setItem(ADMIN_KEY + '_pwd', newPwd);
+    alert('密码已修改！请牢记新密码: ' + newPwd);
+  } else if (newPwd) {
+    alert('密码至少6位！');
+  }
+}
+
+function resetAll() {
+  if (confirm('确定要重置所有数据吗？\n\n这将清除：\n- 邀请码使用记录\n- 管理密码重置为默认\n\n此操作不可恢复！')) {
+    localStorage.removeItem(ADMIN_KEY + '_records');
+    localStorage.removeItem(ADMIN_KEY + '_pwd');
+    location.reload();
+  }
+}
+</script>
+</body>
+</html>

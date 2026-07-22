@@ -1,0 +1,5 @@
+*.bak
+*.txt
+*.csv
+*.py
+.DS_Store
