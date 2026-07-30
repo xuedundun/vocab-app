@@ -3,40 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>销售管理后台</title>
+<title>销售分流管理 · 共用后台</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,'PingFang SC',sans-serif;background:#F8F6F4;color:#2C2C2C;max-width:600px;margin:0 auto;padding:20px}
+body{font-family:-apple-system,'PingFang SC',sans-serif;background:#F8F6F4;color:#2C2C2C;max-width:640px;margin:0 auto;padding:20px}
 h1{font-size:20px;font-weight:800;margin-bottom:4px}
 .sub{font-size:13px;color:#8E8B86;margin-bottom:20px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
 .card{background:#fff;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 2px 12px rgba(0,0,0,.04)}
 .card h3{font-size:15px;font-weight:700;margin-bottom:12px;color:#C83C3C}
-input,textarea{width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid #E5E2DD;font-size:14px;margin-bottom:8px;outline:none}
-input:focus,textarea:focus{border-color:#C83C3C}
-.row{display:flex;gap:8px}
-.row input{flex:1}
+input,select{width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid #E5E2DD;font-size:14px;margin-bottom:8px;outline:none}
+input:focus{border-color:#C83C3C}
 .btn{padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;border:none;cursor:pointer}
 .btn-r{background:#C83C3C;color:#fff}
 .btn-w{background:#fff;color:#C83C3C;border:1.5px solid #E5E2DD}
 .btn-s{padding:6px 14px;font-size:12px}
 .btn:active{opacity:.8}
-.sales-card{display:flex;align-items:center;justify-content:space-between;padding:12px;background:#FAF9F7;border-radius:12px;margin-bottom:8px}
-.sales-card .info{flex:1}
-.sales-card .name{font-size:15px;font-weight:600}
-.sales-card .stat{font-size:11px;color:#8E8B86;margin-top:2px}
-.sales-card .limit{font-size:12px;color:#C83C3C;font-weight:600}
-.sales-card .actions{display:flex;gap:6px}
-.toggle{width:44px;height:24px;border-radius:12px;background:#E5E2DD;cursor:pointer;position:relative;transition:.2s}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+th,td{padding:8px 6px;text-align:left;border-bottom:1px solid #F0EDE8}
+th{font-size:11px;color:#8E8B86;font-weight:600}
+.toggle{width:40px;height:22px;border-radius:11px;background:#E5E2DD;cursor:pointer;position:relative;transition:.2s;display:inline-block}
 .toggle.on{background:#C83C3C}
-.toggle:after{content:'';width:20px;height:20px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:.2s}
-.toggle.on:after{left:22px}
-.badge{display:inline-block;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:600}
+.toggle:after{content:'';width:18px;height:18px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:.2s}
+.toggle.on:after{left:20px}
+.badge{padding:2px 8px;border-radius:8px;font-size:10px;font-weight:600}
 .badge-on{background:#F0E8E0;color:#C8963C}
 .badge-off{background:#F0E8E8;color:#C83C3C}
+.hidden{display:none}
 #loginBox{position:fixed;top:0;left:0;right:0;bottom:0;background:#F8F6F4;display:flex;align-items:center;justify-content:center;z-index:999}
 #loginBox .box{background:#fff;border-radius:20px;padding:30px;text-align:center;width:300px;box-shadow:0 8px 40px rgba(0,0,0,.1)}
-#loginBox input{text-align:center;font-size:16px}
-.hidden{display:none}
+code{background:#FAF9F7;padding:2px 6px;border-radius:4px;font-size:12px}
 </style>
 </head>
 <body>
@@ -52,56 +48,72 @@ input:focus,textarea:focus{border-color:#C83C3C}
 
 <div id="panel" class="hidden">
   <h1>销售分流管理</h1>
-  <p class="sub">NANA学姐 × 九九学姐 · 高考词汇速通关</p>
+  <p class="sub">NANA学姐 + 九九学姐 · 共用销售池 · 统一管理</p>
 
-  <!-- 统计 -->
+  <!-- 今日概览 -->
   <div class="card">
-    <h3>今日数据</h3>
-    <div style="display:flex;gap:12px;flex-wrap:wrap" id="statsRow"></div>
+    <h3>今日概览 · <span id="todayLabel"></span></h3>
+    <div class="row" id="statsRow"></div>
+    <div style="margin-top:8px;font-size:12px;color:#8E8B86">
+      NANA版: <span id="nanaTotal">0</span> 次 &nbsp;|&nbsp; 九九版: <span id="jiujiuTotal">0</span> 次
+    </div>
   </div>
 
-  <!-- 添加销售 -->
+  <!-- 添加/批量 -->
   <div class="card">
     <h3>添加销售</h3>
-    <input id="newName" placeholder="销售姓名（如：李老师）">
-    <input id="newQR" placeholder="微信二维码图片链接">
     <div class="row">
-      <input id="newLimit" type="number" placeholder="每日上限（默认30）" value="30">
+      <input id="newName" placeholder="姓名" style="flex:1;min-width:100px">
+      <input id="newQR" placeholder="微信二维码链接" style="flex:2;min-width:180px">
+      <input id="newLimit" type="number" value="10" style="width:60px">
       <button class="btn btn-r" onclick="addSale()">添加</button>
     </div>
-    <p style="font-size:11px;color:#8E8B86;margin-top:6px">二维码图片请上传到图床后粘贴链接，或直接用微信截图转成图片链接</p>
   </div>
 
-  <!-- 销售列表 -->
+  <!-- 列表 -->
   <div class="card">
-    <h3>销售列表</h3>
-    <div id="salesList"></div>
+    <h3>销售列表 · <span id="salesCount">0</span>人</h3>
+    <table>
+      <thead><tr><th>状态</th><th>姓名</th><th>今日NANA</th><th>今日九九</th><th>上限</th><th>操作</th></tr></thead>
+      <tbody id="salesTbody"></tbody>
+    </table>
   </div>
 
-  <!-- 当日重置 -->
+  <!-- 工具 -->
   <div class="card">
-    <button class="btn btn-r" onclick="resetToday()">重置今日计数</button>
-    <span style="font-size:12px;color:#8E8B86;margin-left:8px">所有销售今日接待数归零</span>
-  </div>
-
-  <!-- 分流页链接 -->
-  <div class="card">
-    <h3>分流页地址</h3>
-    <div style="display:flex;align-items:center;gap:8px">
-      <code style="flex:1;padding:10px;background:#FAF9F7;border-radius:8px;font-size:13px;word-break:break-all">xuedundun.github.io/vocab-app/distribute/</code>
-      <button class="btn btn-r btn-s" onclick="navigator.clipboard.writeText('https://xuedundun.github.io/vocab-app/distribute/')">复制</button>
+    <h3>工具</h3>
+    <div class="row">
+      <button class="btn btn-r" onclick="resetToday()">重置今日计数</button>
+      <button class="btn btn-w" onclick="resetAll()">恢复默认20人</button>
     </div>
-    <p style="font-size:11px;color:#8E8B86;margin-top:6px">把这个地址生成二维码，贴在资料里</p>
+  </div>
+
+  <!-- 链接 -->
+  <div class="card">
+    <h3>分流页链接</h3>
+    <div style="margin-bottom:8px">
+      <b>NANA学姐版</b><br>
+      <code>xuedundun.github.io/vocab-app/distribute/nana/</code>
+      <button class="btn btn-r btn-s" style="margin-left:4px" onclick="copyLink('nana')">复制</button>
+    </div>
+    <div>
+      <b>九九学姐版</b><br>
+      <code>xuedundun.github.io/vocab-app/distribute/jiujiu/</code>
+      <button class="btn btn-r btn-s" style="margin-left:4px" onclick="copyLink('jiujiu')">复制</button>
+    </div>
   </div>
 </div>
 
 <script>
-var ADMIN_KEY = 'xd_sales_admin';
+var D_PWD = 'distribute_admin_pwd';
+var D_SALES = 'distribute_sales';
+var NANA_STATS = 'nana_sales_stats';
+var JIUJIU_STATS = 'jiujiu_sales_stats';
 var DEFAULT_PWD = 'xdd2026';
 
 function login(){
   var p = document.getElementById('pwd').value.trim();
-  var saved = localStorage.getItem(ADMIN_KEY + '_pwd') || DEFAULT_PWD;
+  var saved = localStorage.getItem(D_PWD) || DEFAULT_PWD;
   if(p === saved){
     document.getElementById('loginBox').style.display = 'none';
     document.getElementById('panel').classList.remove('hidden');
@@ -110,93 +122,71 @@ function login(){
 }
 document.getElementById('pwd').addEventListener('keydown',function(e){if(e.key==='Enter')login();});
 
-var DEFAULT_SALES = [
-  {id:'s1',name:'李老师',qr:'',dailyMax:30,active:true},
-  {id:'s2',name:'王老师',qr:'',dailyMax:30,active:true},
-  {id:'s3',name:'张老师',qr:'',dailyMax:30,active:true}
-];
+var DEFAULT_20 = [];
+var names = '李王张刘陈杨赵黄周吴徐孙马朱胡郭何高林郑'.split('');
+for(var i=0;i<20;i++) DEFAULT_20.push({id:'s'+(i+1),name:names[i]+'老师',qr:'',dailyMax:10,active:true});
 
 function getSales(){
-  try{ return JSON.parse(localStorage.getItem('xd_sales') || JSON.stringify(DEFAULT_SALES)); }
-  catch(e){ return DEFAULT_SALES; }
+  try{ var d=JSON.parse(localStorage.getItem(D_SALES)); return (d&&d.length>0)?d:DEFAULT_20; }
+  catch(e){ return DEFAULT_20; }
 }
-function saveSales(s){ localStorage.setItem('xd_sales', JSON.stringify(s)); }
-
-function getStats(){
-  try{ return JSON.parse(localStorage.getItem('xd_sales_stats') || '{}'); }
-  catch(e){ return {}; }
-}
-
+function saveSales(s){ localStorage.setItem(D_SALES, JSON.stringify(s)); }
+function getStats(key){ try{ return JSON.parse(localStorage.getItem(key)||'{}'); }catch(e){ return{}; } }
 function today(){ return new Date().toISOString().slice(0,10); }
 
 function render(){
   var sales = getSales();
-  var stats = getStats();
-  var ts = today();
+  var ns = getStats(NANA_STATS), js = getStats(JIUJIU_STATS), ts = today();
+  document.getElementById('todayLabel').textContent = ts;
+  document.getElementById('salesCount').textContent = sales.length;
 
-  // 统计
-  var html = '';
+  var nTotal=0, jTotal=0;
+  var statsHtml = '';
   sales.forEach(function(s){
-    var count = stats[s.id + '_' + ts] || 0;
-    var pct = Math.round(count / s.dailyMax * 100);
-    html += '<div style="background:#FAF9F7;border-radius:10px;padding:10px 14px;text-align:center;min-width:80px">' +
-      '<div style="font-size:20px;font-weight:800;color:'+(count>=s.dailyMax?'#C83C3C':'#2C2C2C')+'">'+count+'</div>'+
-      '<div style="font-size:11px;color:#8E8B86">'+s.name+' / '+s.dailyMax+'</div>'+
-      '<div style="height:3px;background:#E5E2DD;border-radius:2px;margin-top:4px"><div style="height:100%;background:'+(count>=s.dailyMax?'#C83C3C':'#C8963C')+';width:'+pct+'%;border-radius:2px"></div></div></div>';
+    var nc = ns[s.id+'_'+ts]||0, jc = js[s.id+'_'+ts]||0;
+    nTotal+=nc; jTotal+=jc;
+    var total = nc+jc, pct = Math.round(total/s.dailyMax*100);
+    statsHtml += '<div style="background:#FAF9F7;border-radius:10px;padding:8px 12px;text-align:center;min-width:55px">'+
+      '<div style="font-size:18px;font-weight:800;color:'+(total>=s.dailyMax?'#C83C3C':'#2C2C2C')+'">'+total+'</div>'+
+      '<div style="font-size:10px;color:#8E8B86">'+s.name+'</div></div>';
   });
-  document.getElementById('statsRow').innerHTML = html;
+  document.getElementById('statsRow').innerHTML = statsHtml;
+  document.getElementById('nanaTotal').textContent = nTotal;
+  document.getElementById('jiujiuTotal').textContent = jTotal;
 
-  // 列表
-  var list = '';
+  var tbody = '';
   sales.forEach(function(s){
-    var count = stats[s.id + '_' + ts] || 0;
-    list += '<div class="sales-card">'+
-      '<div style="width:36px;height:36px;border-radius:50%;background:'+(s.active?'#F0E8E0':'#E5E2DD')+';display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:'+(s.active?'#C8963C':'#C0BDB8')+';margin-right:10px">'+s.name[0]+'</div>'+
-      '<div class="info"><div class="name">'+s.name+' <span class="badge '+(s.active?'badge-on':'badge-off')+'">'+(s.active?'接客中':'已暂停')+'</span></div>'+
-      '<div class="stat">今日: '+count+'/'+s.dailyMax+' · 上限: '+s.dailyMax+'/天</div></div>'+
-      '<div class="actions">'+
-      '<div class="toggle'+(s.active?' on':'')+'" onclick="toggleSale(\''+s.id+'\')"></div>'+
-      '<button class="btn btn-w btn-s" onclick="removeSale(\''+s.id+'\')">删除</button></div></div>';
+    var nc = ns[s.id+'_'+ts]||0, jc = js[s.id+'_'+ts]||0;
+    tbody += '<tr>'+
+      '<td><span class="toggle'+(s.active?' on':'')+'" onclick="toggleSale(\''+s.id+'\')"></span></td>'+
+      '<td>'+s.name+' <span class="badge '+(s.active?'badge-on':'badge-off')+'">'+(s.active?'接客':'暂停')+'</span></td>'+
+      '<td style="color:#C83C3C;font-weight:600">'+nc+'</td>'+
+      '<td style="color:#C8963C;font-weight:600">'+jc+'</td>'+
+      '<td>'+s.dailyMax+'</td>'+
+      '<td><button class="btn btn-w btn-s" onclick="removeSale(\''+s.id+'\')">删</button></td></tr>';
   });
-  document.getElementById('salesList').innerHTML = list;
+  document.getElementById('salesTbody').innerHTML = tbody;
 }
 
 function addSale(){
-  var name = document.getElementById('newName').value.trim();
-  var qr = document.getElementById('newQR').value.trim();
-  var limit = parseInt(document.getElementById('newLimit').value) || 30;
-  if(!name) return alert('请输入销售姓名');
-  var sales = getSales();
-  sales.push({id:'s' + Date.now(), name:name, qr:qr, dailyMax:limit, active:true});
+  var name=document.getElementById('newName').value.trim();
+  var qr=document.getElementById('newQR').value.trim();
+  var limit=parseInt(document.getElementById('newLimit').value)||10;
+  if(!name) return alert('请输入姓名');
+  var sales=getSales();
+  sales.push({id:'s'+Date.now(),name:name,qr:qr,dailyMax:limit,active:true});
   saveSales(sales);
-  document.getElementById('newName').value = '';
-  document.getElementById('newQR').value = '';
+  document.getElementById('newName').value='';
+  document.getElementById('newQR').value='';
   render();
 }
-
-function toggleSale(id){
-  var sales = getSales();
-  sales.forEach(function(s){ if(s.id === id) s.active = !s.active; });
-  saveSales(sales);
-  render();
-}
-
-function removeSale(id){
-  if(!confirm('确定删除？')) return;
-  var sales = getSales().filter(function(s){ return s.id !== id; });
-  saveSales(sales);
-  render();
-}
-
-function resetToday(){
-  if(!confirm('确定将今日所有接待数归零？')) return;
-  var stats = getStats();
-  var ts = today();
-  Object.keys(stats).forEach(function(k){
-    if(k.indexOf('_' + ts) >= 0) stats[k] = 0;
-  });
-  localStorage.setItem('xd_sales_stats', JSON.stringify(stats));
-  render();
+function toggleSale(id){var sales=getSales();sales.forEach(function(s){if(s.id===id)s.active=!s.active;});saveSales(sales);render();}
+function removeSale(id){if(!confirm('确定删除？'))return;saveSales(getSales().filter(function(s){return s.id!==id;}));render();}
+function resetToday(){if(!confirm('重置今日所有计数？'))return;localStorage.removeItem(NANA_STATS);localStorage.removeItem(JIUJIU_STATS);render();}
+function resetAll(){if(!confirm('恢复默认20人配置？这会清除自定义修改。'))return;localStorage.removeItem(D_SALES);render();}
+function copyLink(brand){
+  var url = 'https://xuedundun.github.io/vocab-app/distribute/' + brand + '/';
+  navigator.clipboard.writeText(url).then(function(){alert('已复制: '+url);});
 }
 
 render();
