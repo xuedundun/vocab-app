@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="theme-color" content="#C83C3C">
+<meta property="og:title" content="NANA学姐 × 九九学姐 · 高考词汇速通关">
+<meta property="og:description" content="扫码添加教务老师，领取更多备考资料">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
+<title>添加教务老师</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,'PingFang SC',sans-serif;background:#F8F6F4;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+.card{background:#fff;border-radius:24px;padding:32px 24px;text-align:center;max-width:340px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,.08)}
+.brand{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:4px}
+.brand span{font-size:16px;font-weight:800;color:#C83C3C;letter-spacing:1px}
+.brand .dot{width:6px;height:6px;border-radius:50%;background:#C8963C}
+h2{font-size:18px;font-weight:800;color:#2C2C2C;margin:8px 0}
+.sub{font-size:13px;color:#8E8B86;margin-bottom:24px}
+.qr-box{width:200px;height:200px;margin:0 auto 16px;border-radius:16px;overflow:hidden;border:2px solid #F0EDE8}
+.qr-box img{width:100%;height:100%;object-fit:contain}
+.teacher-name{font-size:18px;font-weight:700;color:#2C2C2C;margin-bottom:4px}
+.teacher-label{font-size:13px;color:#C83C3C;font-weight:600;margin-bottom:20px;background:#F8F0F0;display:inline-block;padding:4px 14px;border-radius:12px}
+.guide{font-size:12px;color:#8E8B86;line-height:1.6}
+.guide b{color:#C83C3C}
+.footer{font-size:11px;color:#C0BDB8;margin-top:20px}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="brand">
+    <span>NANA学姐</span>
+    <div class="dot"></div>
+    <span>九九学姐</span>
+  </div>
+  <h2>高考词汇速通关</h2>
+  <p class="sub">扫码添加教务老师 · 领取更多备考资料</p>
+
+  <div class="qr-box">
+    <img id="qrImg" src="" alt="微信二维码">
+  </div>
+
+  <div class="teacher-name" id="teacherName">---</div>
+  <div class="teacher-label">你的专属教务老师</div>
+
+  <p class="guide">
+    长按上方二维码 → 选择<b>"识别图中二维码"</b><br>
+    添加老师微信，免费领取完整版资料
+  </p>
+
+  <p class="footer">NANA学姐 × 九九学姐 联合出品</p>
+</div>
+
+<script>
+// ====== 分流逻辑 ======
+var DEFAULT_SALES = [
+  {id:'s1',name:'李老师',qr:'',dailyMax:30,active:true},
+  {id:'s2',name:'王老师',qr:'',dailyMax:30,active:true},
+  {id:'s3',name:'张老师',qr:'',dailyMax:30,active:true}
+];
+
+function getSales(){
+  try{ return JSON.parse(localStorage.getItem('xd_sales') || JSON.stringify(DEFAULT_SALES)); }
+  catch(e){ return DEFAULT_SALES; }
+}
+
+function getStats(){
+  try{ return JSON.parse(localStorage.getItem('xd_sales_stats') || '{}'); }
+  catch(e){ return {}; }
+}
+
+function today(){ return new Date().toISOString().slice(0,10); }
+
+// 分配销售
+function assignTeacher(){
+  var sales = getSales();
+  var stats = getStats();
+  var todayStr = today();
+
+  // 检查是否已经分配过
+  var assigned = localStorage.getItem('xd_assigned_teacher');
+  if(assigned){
+    var s = sales.find(function(x){return x.id === assigned;});
+    if(s && s.active) return s;
+  }
+
+  // 过滤可用销售
+  var available = sales.filter(function(s){
+    if(!s.active) return false;
+    var key = s.id + '_' + todayStr;
+    var count = stats[key] || 0;
+    return count < s.dailyMax;
+  });
+
+  if(available.length === 0){
+    // 全部满了，用第一个
+    return sales[0];
+  }
+
+  // 轮询：找今天被分配次数最少的
+  available.sort(function(a,b){
+    var ca = stats[a.id + '_' + todayStr] || 0;
+    var cb = stats[b.id + '_' + todayStr] || 0;
+    return ca - cb;
+  });
+
+  var chosen = available[0];
+
+  // 记录
+  localStorage.setItem('xd_assigned_teacher', chosen.id);
+  var key = chosen.id + '_' + todayStr;
+  stats[key] = (stats[key] || 0) + 1;
+  localStorage.setItem('xd_sales_stats', JSON.stringify(stats));
+
+  return chosen;
+}
+
+// 渲染
+var teacher = assignTeacher();
+document.getElementById('qrImg').src = teacher.qr || 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="#F0EDE8"/><text x="100" y="90" text-anchor="middle" fill="#C0BDB8" font-size="14">请上传</text><text x="100" y="115" text-anchor="middle" fill="#C0BDB8" font-size="14">微信二维码</text></svg>');
+document.getElementById('teacherName').textContent = teacher.name;
+</script>
+</body>
+</html>
