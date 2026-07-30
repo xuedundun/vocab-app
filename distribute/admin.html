@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>销售管理后台</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,'PingFang SC',sans-serif;background:#F8F6F4;color:#2C2C2C;max-width:600px;margin:0 auto;padding:20px}
+h1{font-size:20px;font-weight:800;margin-bottom:4px}
+.sub{font-size:13px;color:#8E8B86;margin-bottom:20px}
+.card{background:#fff;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.card h3{font-size:15px;font-weight:700;margin-bottom:12px;color:#C83C3C}
+input,textarea{width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid #E5E2DD;font-size:14px;margin-bottom:8px;outline:none}
+input:focus,textarea:focus{border-color:#C83C3C}
+.row{display:flex;gap:8px}
+.row input{flex:1}
+.btn{padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;border:none;cursor:pointer}
+.btn-r{background:#C83C3C;color:#fff}
+.btn-w{background:#fff;color:#C83C3C;border:1.5px solid #E5E2DD}
+.btn-s{padding:6px 14px;font-size:12px}
+.btn:active{opacity:.8}
+.sales-card{display:flex;align-items:center;justify-content:space-between;padding:12px;background:#FAF9F7;border-radius:12px;margin-bottom:8px}
+.sales-card .info{flex:1}
+.sales-card .name{font-size:15px;font-weight:600}
+.sales-card .stat{font-size:11px;color:#8E8B86;margin-top:2px}
+.sales-card .limit{font-size:12px;color:#C83C3C;font-weight:600}
+.sales-card .actions{display:flex;gap:6px}
+.toggle{width:44px;height:24px;border-radius:12px;background:#E5E2DD;cursor:pointer;position:relative;transition:.2s}
+.toggle.on{background:#C83C3C}
+.toggle:after{content:'';width:20px;height:20px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:.2s}
+.toggle.on:after{left:22px}
+.badge{display:inline-block;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:600}
+.badge-on{background:#F0E8E0;color:#C8963C}
+.badge-off{background:#F0E8E8;color:#C83C3C}
+#loginBox{position:fixed;top:0;left:0;right:0;bottom:0;background:#F8F6F4;display:flex;align-items:center;justify-content:center;z-index:999}
+#loginBox .box{background:#fff;border-radius:20px;padding:30px;text-align:center;width:300px;box-shadow:0 8px 40px rgba(0,0,0,.1)}
+#loginBox input{text-align:center;font-size:16px}
+.hidden{display:none}
+</style>
+</head>
+<body>
+
+<div id="loginBox">
+  <div class="box">
+    <h2 style="margin-bottom:16px">教务管理登录</h2>
+    <input id="pwd" type="password" placeholder="管理密码">
+    <button class="btn btn-r" style="width:100%;margin-top:8px" onclick="login()">进入</button>
+    <p style="font-size:11px;color:#8E8B86;margin-top:12px">默认密码: xdd2026</p>
+  </div>
+</div>
+
+<div id="panel" class="hidden">
+  <h1>销售分流管理</h1>
+  <p class="sub">NANA学姐 × 九九学姐 · 高考词汇速通关</p>
+
+  <!-- 统计 -->
+  <div class="card">
+    <h3>今日数据</h3>
+    <div style="display:flex;gap:12px;flex-wrap:wrap" id="statsRow"></div>
+  </div>
+
+  <!-- 添加销售 -->
+  <div class="card">
+    <h3>添加销售</h3>
+    <input id="newName" placeholder="销售姓名（如：李老师）">
+    <input id="newQR" placeholder="微信二维码图片链接">
+    <div class="row">
+      <input id="newLimit" type="number" placeholder="每日上限（默认30）" value="30">
+      <button class="btn btn-r" onclick="addSale()">添加</button>
+    </div>
+    <p style="font-size:11px;color:#8E8B86;margin-top:6px">二维码图片请上传到图床后粘贴链接，或直接用微信截图转成图片链接</p>
+  </div>
+
+  <!-- 销售列表 -->
+  <div class="card">
+    <h3>销售列表</h3>
+    <div id="salesList"></div>
+  </div>
+
+  <!-- 当日重置 -->
+  <div class="card">
+    <button class="btn btn-r" onclick="resetToday()">重置今日计数</button>
+    <span style="font-size:12px;color:#8E8B86;margin-left:8px">所有销售今日接待数归零</span>
+  </div>
+
+  <!-- 分流页链接 -->
+  <div class="card">
+    <h3>分流页地址</h3>
+    <div style="display:flex;align-items:center;gap:8px">
+      <code style="flex:1;padding:10px;background:#FAF9F7;border-radius:8px;font-size:13px;word-break:break-all">xuedundun.github.io/vocab-app/distribute/</code>
+      <button class="btn btn-r btn-s" onclick="navigator.clipboard.writeText('https://xuedundun.github.io/vocab-app/distribute/')">复制</button>
+    </div>
+    <p style="font-size:11px;color:#8E8B86;margin-top:6px">把这个地址生成二维码，贴在资料里</p>
+  </div>
+</div>
+
+<script>
+var ADMIN_KEY = 'xd_sales_admin';
+var DEFAULT_PWD = 'xdd2026';
+
+function login(){
+  var p = document.getElementById('pwd').value.trim();
+  var saved = localStorage.getItem(ADMIN_KEY + '_pwd') || DEFAULT_PWD;
+  if(p === saved){
+    document.getElementById('loginBox').style.display = 'none';
+    document.getElementById('panel').classList.remove('hidden');
+    render();
+  }
+}
+document.getElementById('pwd').addEventListener('keydown',function(e){if(e.key==='Enter')login();});
+
+var DEFAULT_SALES = [
+  {id:'s1',name:'李老师',qr:'',dailyMax:30,active:true},
+  {id:'s2',name:'王老师',qr:'',dailyMax:30,active:true},
+  {id:'s3',name:'张老师',qr:'',dailyMax:30,active:true}
+];
+
+function getSales(){
+  try{ return JSON.parse(localStorage.getItem('xd_sales') || JSON.stringify(DEFAULT_SALES)); }
+  catch(e){ return DEFAULT_SALES; }
+}
+function saveSales(s){ localStorage.setItem('xd_sales', JSON.stringify(s)); }
+
+function getStats(){
+  try{ return JSON.parse(localStorage.getItem('xd_sales_stats') || '{}'); }
+  catch(e){ return {}; }
+}
+
+function today(){ return new Date().toISOString().slice(0,10); }
+
+function render(){
+  var sales = getSales();
+  var stats = getStats();
+  var ts = today();
+
+  // 统计
+  var html = '';
+  sales.forEach(function(s){
+    var count = stats[s.id + '_' + ts] || 0;
+    var pct = Math.round(count / s.dailyMax * 100);
+    html += '<div style="background:#FAF9F7;border-radius:10px;padding:10px 14px;text-align:center;min-width:80px">' +
+      '<div style="font-size:20px;font-weight:800;color:'+(count>=s.dailyMax?'#C83C3C':'#2C2C2C')+'">'+count+'</div>'+
+      '<div style="font-size:11px;color:#8E8B86">'+s.name+' / '+s.dailyMax+'</div>'+
+      '<div style="height:3px;background:#E5E2DD;border-radius:2px;margin-top:4px"><div style="height:100%;background:'+(count>=s.dailyMax?'#C83C3C':'#C8963C')+';width:'+pct+'%;border-radius:2px"></div></div></div>';
+  });
+  document.getElementById('statsRow').innerHTML = html;
+
+  // 列表
+  var list = '';
+  sales.forEach(function(s){
+    var count = stats[s.id + '_' + ts] || 0;
+    list += '<div class="sales-card">'+
+      '<div style="width:36px;height:36px;border-radius:50%;background:'+(s.active?'#F0E8E0':'#E5E2DD')+';display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:'+(s.active?'#C8963C':'#C0BDB8')+';margin-right:10px">'+s.name[0]+'</div>'+
+      '<div class="info"><div class="name">'+s.name+' <span class="badge '+(s.active?'badge-on':'badge-off')+'">'+(s.active?'接客中':'已暂停')+'</span></div>'+
+      '<div class="stat">今日: '+count+'/'+s.dailyMax+' · 上限: '+s.dailyMax+'/天</div></div>'+
+      '<div class="actions">'+
+      '<div class="toggle'+(s.active?' on':'')+'" onclick="toggleSale(\''+s.id+'\')"></div>'+
+      '<button class="btn btn-w btn-s" onclick="removeSale(\''+s.id+'\')">删除</button></div></div>';
+  });
+  document.getElementById('salesList').innerHTML = list;
+}
+
+function addSale(){
+  var name = document.getElementById('newName').value.trim();
+  var qr = document.getElementById('newQR').value.trim();
+  var limit = parseInt(document.getElementById('newLimit').value) || 30;
+  if(!name) return alert('请输入销售姓名');
+  var sales = getSales();
+  sales.push({id:'s' + Date.now(), name:name, qr:qr, dailyMax:limit, active:true});
+  saveSales(sales);
+  document.getElementById('newName').value = '';
+  document.getElementById('newQR').value = '';
+  render();
+}
+
+function toggleSale(id){
+  var sales = getSales();
+  sales.forEach(function(s){ if(s.id === id) s.active = !s.active; });
+  saveSales(sales);
+  render();
+}
+
+function removeSale(id){
+  if(!confirm('确定删除？')) return;
+  var sales = getSales().filter(function(s){ return s.id !== id; });
+  saveSales(sales);
+  render();
+}
+
+function resetToday(){
+  if(!confirm('确定将今日所有接待数归零？')) return;
+  var stats = getStats();
+  var ts = today();
+  Object.keys(stats).forEach(function(k){
+    if(k.indexOf('_' + ts) >= 0) stats[k] = 0;
+  });
+  localStorage.setItem('xd_sales_stats', JSON.stringify(stats));
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
