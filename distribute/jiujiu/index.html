@@ -46,8 +46,8 @@ h2{font-size:20px;font-weight:800;color:#2C2C2C;margin:8px 0}
   <p class="footer">九九学姐 · 1000人逆袭计划</p>
 </div>
 <script>
-var DEFAULT_8=[{id:'s1',name:'张张',qr:'https://xuedundun.github.io/vocab-app/distribute/sales/%E5%BC%A0%E5%BC%A0.jpg',dailyMax:10,active:true},{id:'s2',name:'钟心',qr:'https://xuedundun.github.io/vocab-app/distribute/sales/%E9%92%9F%E5%BF%83.jpg',dailyMax:10,active:true},{id:'s3',name:'陈金泉',qr:'https://xuedundun.github.io/vocab-app/distribute/sales/%E9%99%88%E9%87%91%E6%B3%89.jpg',dailyMax:10,active:true}];
-var SHARED_SALES="distribute_sales",STORAGE_STATS="jiujiu_sales_stats",STORAGE_ASSIGN="jiujiu_assigned_teacher";
+var DEFAULT_8=[{id:'s1',name:'张张',qr:'https://xuedundun.github.io/vocab-app/distribute/sales/%E5%BC%A0%E5%BC%A0.jpg',dailyMax:9999,active:true},{id:'s2',name:'钟心',qr:'https://xuedundun.github.io/vocab-app/distribute/sales/%E9%92%9F%E5%BF%83.jpg',dailyMax:9999,active:true},{id:'s3',name:'陈金泉',qr:'https://xuedundun.github.io/vocab-app/distribute/sales/%E9%99%88%E9%87%91%E6%B3%89.jpg',dailyMax:9999,active:true}];
+var SHARED_SALES="jiujiu_sales_pool",STORAGE_STATS="jiujiu_sales_stats",STORAGE_ASSIGN="jiujiu_assigned_teacher";
 function getSales(){try{var d=JSON.parse(localStorage.getItem(SHARED_SALES));return (d&&d.length>0)?d:DEFAULT_8;}catch(e){return DEFAULT_8;}}
 function getStats(){try{return JSON.parse(localStorage.getItem(STORAGE_STATS)||"{}");}catch(e){return{};}}
 function today(){return new Date().toISOString().slice(0,10);}
