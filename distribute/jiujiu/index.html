@@ -56,7 +56,11 @@ function assignTeacher(){
   var assigned=localStorage.getItem(STORAGE_ASSIGN);
   if(assigned){var s=sales.find(function(x){return x.id===assigned;});if(s&&s.active)return s;}
   var available=sales.filter(function(s){if(!s.active)return false;var c=stats[s.id+"_"+ts]||0;return c<s.dailyMax;});
-  if(available.length===0)return sales[0];
+  if(available.length===0){
+      document.getElementById('qrImg').style.display='none';
+      document.querySelector('.qr-box').innerHTML='<div style="padding:40px;text-align:center;color:#8E8B86;font-size:14px">今日咨询人数已满<br>请明天再来<br><br>或直接联系你的教务老师</div>';
+      return sales[0];
+    }
   available.sort(function(a,b){return (stats[a.id+"_"+ts]||0)-(stats[b.id+"_"+ts]||0);});
   var chosen=available[0];
   localStorage.setItem(STORAGE_ASSIGN,chosen.id);
