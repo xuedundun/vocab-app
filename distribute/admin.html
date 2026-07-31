@@ -84,7 +84,7 @@ code{background:#FAF9F7;padding:2px 6px;border-radius:4px;font-size:12px}
     <h3>工具</h3>
     <div class="row">
       <button class="btn btn-r" onclick="resetToday()">重置今日计数</button>
-      <button class="btn btn-w" onclick="resetAll()">恢复默认20人</button>
+      <button class="btn btn-w" onclick="resetAll()">恢复默认8人</button>
     </div>
   </div>
 
@@ -122,13 +122,20 @@ function login(){
 }
 document.getElementById('pwd').addEventListener('keydown',function(e){if(e.key==='Enter')login();});
 
-var DEFAULT_20 = [];
-var names = '李王张刘陈杨赵黄周吴徐孙马朱胡郭何高林郑'.split('');
-for(var i=0;i<20;i++) DEFAULT_20.push({id:'s'+(i+1),name:names[i]+'老师',qr:'',dailyMax:10,active:true});
+var DEFAULT_8 = [
+  {id:'s1',name:'何良萍',qr:'https://xuedundun.github.io/vocab-app/distribute/sales/%E4%BD%95%E8%89%AF%E8%90%8D.jpg',dailyMax:10,active:true},
+  {id:'s2',name:'唐瑶',qr:'https://xuedundun.github.io/vocab-app/distribute/sales/%E5%94%90%E7%91%B6.jpg',dailyMax:10,active:true},
+  {id:'s3',name:'奉珈仪',qr:'https://xuedundun.github.io/vocab-app/distribute/sales/%E5%A5%89%E7%8F%88%E4%BB%AA.jpg',dailyMax:10,active:true},
+  {id:'s4',name:'张张',qr:'https://xuedundun.github.io/vocab-app/distribute/sales/%E5%BC%A0%E5%BC%A0.jpg',dailyMax:10,active:true},
+  {id:'s5',name:'曈曈',qr:'https://xuedundun.github.io/vocab-app/distribute/sales/%E6%9B%88%E6%9B%88.jpg',dailyMax:10,active:true},
+  {id:'s6',name:'钟心',qr:'https://xuedundun.github.io/vocab-app/distribute/sales/%E9%92%9F%E5%BF%83.jpg',dailyMax:10,active:true},
+  {id:'s7',name:'锓锓',qr:'https://xuedundun.github.io/vocab-app/distribute/sales/%E9%94%93%E9%94%93.jpg',dailyMax:10,active:true},
+  {id:'s8',name:'陈金泉',qr:'https://xuedundun.github.io/vocab-app/distribute/sales/%E9%99%88%E9%87%91%E6%B3%89.jpg',dailyMax:10,active:true}
+];
 
 function getSales(){
-  try{ var d=JSON.parse(localStorage.getItem(D_SALES)); return (d&&d.length>0)?d:DEFAULT_20; }
-  catch(e){ return DEFAULT_20; }
+  try{ var d=JSON.parse(localStorage.getItem(D_SALES)); return (d&&d.length>0)?d:DEFAULT_8; }
+  catch(e){ return DEFAULT_8; }
 }
 function saveSales(s){ localStorage.setItem(D_SALES, JSON.stringify(s)); }
 function getStats(key){ try{ return JSON.parse(localStorage.getItem(key)||'{}'); }catch(e){ return{}; } }
@@ -183,7 +190,7 @@ function addSale(){
 function toggleSale(id){var sales=getSales();sales.forEach(function(s){if(s.id===id)s.active=!s.active;});saveSales(sales);render();}
 function removeSale(id){if(!confirm('确定删除？'))return;saveSales(getSales().filter(function(s){return s.id!==id;}));render();}
 function resetToday(){if(!confirm('重置今日所有计数？'))return;localStorage.removeItem(NANA_STATS);localStorage.removeItem(JIUJIU_STATS);render();}
-function resetAll(){if(!confirm('恢复默认20人配置？这会清除自定义修改。'))return;localStorage.removeItem(D_SALES);render();}
+function resetAll(){if(!confirm('恢复默认8人配置？这会清除自定义修改。'))return;localStorage.removeItem(D_SALES);render();}
 function copyLink(brand){
   var url = 'https://xuedundun.github.io/vocab-app/distribute/' + brand + '/';
   navigator.clipboard.writeText(url).then(function(){alert('已复制: '+url);});
