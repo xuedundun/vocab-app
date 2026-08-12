@@ -342,7 +342,7 @@ function renderLevels(c,p){
   }
   h+='</div></div>';
 
-  h+='<div class="phase-card"><div class="ph-top"><div class="ph-dot" style="background:var(--red)"></div><div class="ph-info"><div class="ph-name">正式背诵</div><div class="ph-sub">Lv 1-30 · 3946词（含高频复习）· 150词/天 · '+(hd>=10?'已解锁':'高频通关后解锁')+'</div></div><div class="ph-count" style="color:var(--red)">'+fd+'<span style="font-size:13px;color:var(--sub)">/20</span></div></div><div class="phase-bar"><div class="phase-bar-fill" style="background:var(--red);width:'+(fd*5)+'%"></div></div>';
+  h+='<div class="phase-card"><div class="ph-top"><div class="ph-dot" style="background:var(--red)"></div><div class="ph-info"><div class="ph-name">正式背诵</div><div class="ph-sub">Lv 1-30 · 3946词（含高频复习）· 150词/天 · '+(hd>=10?'已解锁':'高频通关后解锁')+'</div></div><div class="ph-count" style="color:var(--red)">'+fd+'<span style="font-size:13px;color:var(--sub)">/20</span></div></div><div class="phase-bar"><div class="phase-bar-fill" style="background:var(--red);width:"+(fd*3.7)+"%"></div></div>';
   if(hd>=10){
     h+='<div class="level-grid">';
     for(var i=10;i<30;i++){var lv=LEVELS[i],isD=false,st=0;
@@ -588,9 +588,9 @@ function renderReview(c,p){
   for(var i=0;i<LEVELS.length;i++){var lv=LEVELS[i];
     for(var j=0;j<lv.words.length;j++){var w=lv.words[j],ws=p[w.w];if(ws&&ws.nr&&ws.nr<=ts&&ws.nr!=='2099-01-01')words.push({w:w.w,m:w.m,lid:lv.id,name:lv.name});}
   }
-  if(!words.length){c.innerHTML='<div class="empty"><div class="e-icon">✓</div><h3>暂无待复习</h3><p>艾宾浩斯计划正常进行中</p></div>';return;}
+  if(!words.length){c.innerHTML='<div class="empty"><div class="e-icon">✓</div><h3>暂无待复习</h3><p>1+1复习计划正常进行中</p></div>';return;}
   var grp={};for(var i=0;i<words.length;i++){var rw=words[i];if(!grp[rw.lid])grp[rw.lid]={name:rw.name,words:[]};grp[rw.lid].words.push(rw);}
-  var h='<div style="padding:20px 16px 0"><div style="font-size:22px;font-weight:800;margin-bottom:2px">复习提醒</div><div style="font-size:13px;color:var(--sub);margin-bottom:12px">基于艾宾浩斯遗忘曲线 · 今日待复习 <b style="color:var(--red)">'+words.length+'</b> 词</div></div>';
+  var h='<div style="padding:20px 16px 0"><div style="font-size:22px;font-weight:800;margin-bottom:2px">复习提醒</div><div style="font-size:13px;color:var(--sub);margin-bottom:12px">今日学新词 · 明日复习 · 1+1记忆法 · 待复习 <b style="color:var(--red)">'+words.length+'</b> 词</div></div>';
   var keys=Object.keys(grp);
   for(var i=0;i<keys.length;i++){var g=grp[keys[i]];
     h+='<div class="review-item" onclick="reviewLevel('+keys[i]+')"><div class="ri-left"><div class="ri-dot"></div><div><div class="ri-title">'+g.name+'</div><div class="ri-sub">'+g.words.length+'个词待复习</div></div></div><div class="ri-badge">去复习</div></div>';
