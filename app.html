@@ -192,6 +192,17 @@ function getPhase(p){ return ((p.done||[]).length<10)?'high':'full'; }
 function getDailyTarget(p){ return getPhase(p)==='high'?HIGH_DAILY:FULL_DAILY; }
 function getPhaseDay(p){ var d=(p.done||[]).length;return getPhase(p)==='high'?d+1:d-9; }
 
+function checkUpdate(){
+  fetch('version.json?t='+Date.now()).then(function(r){return r.json()}).then(function(d){
+    if(d.v !== '20250812' && localStorage.getItem('app_ver_skip') !== d.v){
+      var b=document.createElement('div');
+      b.style.cssText='position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#C83C3C;color:#fff;padding:10px 16px;text-align:center;font-size:13px;font-weight:600;z-index:9999;cursor:pointer';
+      b.innerHTML='有新版本，点击刷新 <span style=background:rgba(255,255,255,.2);padding:2px 10px;border-radius:10px;font-size:12px>更新</span>';
+      b.onclick=function(){localStorage.removeItem('app_ver_skip');location.reload(true);};
+      document.body.insertBefore(b,document.body.firstChild);
+    }
+  }).catch(function(){});
+}
 function initApp(){if(localStorage.getItem("xd_act")!=="1"){window.location.href="index.html";return;}
   document.getElementById('loadingBox').style.display='none';
   document.getElementById('app').style.display='block';
