@@ -171,7 +171,7 @@ script.onload = function(){ setTimeout(initApp, 200); };
 script.onerror = function(){ document.getElementById('loadMsg').innerHTML = '加载失败<br><button onclick=location.reload() style="margin-top:12px;padding:10px 24px;border-radius:20px;background:#C83C3C;color:#fff;border:none;font-size:14px;font-weight:600">重试</button>'; };
 document.head.appendChild(script);
 
-var EBB=[1,2,4,7,15],HIGH_DAILY=100,FULL_DAILY=150;
+var EBB=[1],HIGH_DAILY=100,FULL_DAILY=150;
 var tab='study',fcIdx=0,fcWords=[],flipped=false,qzIdx=0,qzWords=[],qzScore=0;
 var HIGH_SET=null;
 
@@ -192,7 +192,7 @@ function getPhase(p){ return ((p.done||[]).length<10)?'high':'full'; }
 function getDailyTarget(p){ return getPhase(p)==='high'?HIGH_DAILY:FULL_DAILY; }
 function getPhaseDay(p){ var d=(p.done||[]).length;return getPhase(p)==='high'?d+1:d-9; }
 
-function initApp(){
+function initApp(){if(localStorage.getItem("nana_act")!=="1"){window.location.href="index.html";return;}
   document.getElementById('loadingBox').style.display='none';
   document.getElementById('app').style.display='block';
   document.getElementById('tabs').style.display='flex';
@@ -205,7 +205,7 @@ document.getElementById('tabs').addEventListener('click',function(e){ var el=e.t
 
 function todayWords(){
   var p=load(),ts=today(),words=[];
-  var phase=getPhase(p),dt=getDailyTarget(p),sl=phase==='high'?0:10,el=phase==='high'?10:30;
+  var phase=getPhase(p),dt=getDailyTarget(p),sl=0,el=30;
   var newPool=[];
   for(var i=sl;i<el;i++){ var lv=LEVELS[i];
     for(var j=0;j<lv.words.length;j++){var w=lv.words[j],ws=p[w.w]||{};if(!ws.seen)newPool.push({w:w.w,m:w.m,lid:lv.id,isNew:true,isH:isHigh(w.w)});}
@@ -249,7 +249,7 @@ function updateBadge(p){
 function renderStudy(c,p){
   var words=todayWords(),dt=getDailyTarget(p),phase=getPhase(p);
   var tp=phase==='high'?971:(TOTAL-971);
-  var sp=0,sl=phase==='high'?0:10,el=phase==='high'?10:30;
+  var sp=0,sl=0,el=30;
   for(var i=sl;i<el;i++){var lv=LEVELS[i];for(var j=0;j<lv.words.length;j++){if(p[lv.words[j].w]&&p[lv.words[j].w].s)sp++;}}
   var pct=Math.round(sp/tp*100),circ=2*Math.PI*58,off=circ*(1-pct/100);
 
