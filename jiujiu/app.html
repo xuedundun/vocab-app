@@ -342,7 +342,7 @@ function renderLevels(c,p){
   }
   h+='</div></div>';
 
-  h+='<div class="phase-card"><div class="ph-top"><div class="ph-dot" style="background:var(--red)"></div><div class="ph-info"><div class="ph-name">正式背诵</div><div class="ph-sub">Lv 11-30 · 2975词 · 150词/天 · '+(hd>=10?'已解锁':'高频通关后解锁')+'</div></div><div class="ph-count" style="color:var(--red)">'+fd+'<span style="font-size:13px;color:var(--sub)">/20</span></div></div><div class="phase-bar"><div class="phase-bar-fill" style="background:var(--red);width:'+(fd*5)+'%"></div></div>';
+  h+='<div class="phase-card"><div class="ph-top"><div class="ph-dot" style="background:var(--red)"></div><div class="ph-info"><div class="ph-name">正式背诵</div><div class="ph-sub">Lv 1-30 · 3946词（含高频复习）· 150词/天 · '+(hd>=10?'已解锁':'高频通关后解锁')+'</div></div><div class="ph-count" style="color:var(--red)">'+fd+'<span style="font-size:13px;color:var(--sub)">/20</span></div></div><div class="phase-bar"><div class="phase-bar-fill" style="background:var(--red);width:'+(fd*5)+'%"></div></div>';
   if(hd>=10){
     h+='<div class="level-grid">';
     for(var i=10;i<30;i++){var lv=LEVELS[i],isD=false,st=0;
